@@ -20,6 +20,8 @@ from auto_shorts.models.project import Project
 from auto_shorts.utils.file_utils import sanitize_filename, create_project_dirs
 from auto_shorts.modules.downloader import download
 from auto_shorts.modules.transcriber import transcribe
+from auto_shorts.modules.analyzer import analyze
+from auto_shorts.modules.cutter import cut
 
 logger = logging.getLogger(__name__)
 
@@ -143,9 +145,7 @@ def _run_step(step_name: str, project: Project, project_dir: Path):
         return
 
     elif step_name == "analyze":
-        # TODO: v0.3 — LLM clip analysis
-        logger.warning(f"Step '{step_name}' not yet implemented — skipping")
-        return
+        analyze(project_dir)
 
     elif step_name == "score":
         # TODO: v0.5 — Score fusion
@@ -153,9 +153,7 @@ def _run_step(step_name: str, project: Project, project_dir: Path):
         return
 
     elif step_name == "cut":
-        # TODO: v0.4 — FFmpeg clip cutting
-        logger.warning(f"Step '{step_name}' not yet implemented — skipping")
-        return
+        cut(project_dir)
 
     elif step_name == "caption":
         # TODO: v0.7 — Caption burn-in

@@ -4,8 +4,8 @@ yt-dlp>=2024.0.0
 
 # Later phases (uncomment when needed):
 mlx-whisper                 # v0.2 — Transcription
-# ollama                      # v0.3 — LLM analysis
-# ffmpeg-python               # v0.4 — Video cutting
+ollama                      # v0.3 — LLM analysis
+ffmpeg-python               # v0.4 — Video cutting
 # requests                    # v0.6 — Web scraping
 # beautifulsoup4              # v0.6 — HTML parsing
 # googlesearch-python         # v0.6 — Google search

@@ -102,18 +102,32 @@ def cmd_status(args):
 def _find_project(name: str) -> Path | None:
     """Find a project directory by name or partial match."""
     ensure_workspace()
-    sanitized = sanitize_filename(name)
-
-    # Try exact match first
-    exact = PROJECTS_DIR / sanitized
+    
+    # Try exact directory match first
+    exact = PROJECTS_DIR / name
     if exact.is_dir() and (exact / "project.json").exists():
         return exact
+        
+    sanitized = sanitize_filename(name)
+    exact_sanitized = PROJECTS_DIR / sanitized
+    if exact_sanitized.is_dir() and (exact_sanitized / "project.json").exists():
+        return exact_sanitized
 
-    # Try partial match
+    # Try partial match on directory name or project title
+    name_lower = name.lower()
     for path in PROJECTS_DIR.iterdir():
-        if path.is_dir() and sanitized in path.name:
-            if (path / "project.json").exists():
+        if path.is_dir() and (path / "project.json").exists():
+            if sanitized in path.name:
                 return path
+            
+            # Check title inside project.json
+            try:
+                from auto_shorts.models.project import Project
+                project = Project.load(path)
+                if name_lower in project.name.lower():
+                    return path
+            except Exception:
+                pass
 
     return None
 
