@@ -113,10 +113,11 @@ def _download_video(youtube_url: str, output_path: Path):
         "--no-playlist",
         youtube_url,
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+    # Let yt-dlp print directly to terminal to show progress bar
+    result = subprocess.run(cmd, stdout=sys.stdout, stderr=sys.stderr, timeout=600)
 
     if result.returncode != 0:
-        raise RuntimeError(f"yt-dlp download failed: {result.stderr.strip()}")
+        raise RuntimeError(f"yt-dlp download failed with exit code {result.returncode}")
 
     if not output_path.exists():
         raise FileNotFoundError(f"Video file not created at {output_path}")

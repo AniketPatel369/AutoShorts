@@ -17,8 +17,8 @@ LOGS_DIR = WORKSPACE_DIR / "logs"
 # Ollama LLM
 LLM_MODEL = "llama3.1:8b"
 
-# Whisper STT
-WHISPER_MODEL = "large-v3"
+# Whisper STT (Using small for faster downloads/transcription, can change to large-v3 later)
+WHISPER_MODEL = "small"
 
 # ─── Video Settings ──────────────────────────────────────
 # Shorts format: 9:16 vertical
