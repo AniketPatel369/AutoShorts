@@ -65,8 +65,9 @@ def download(project_dir: Path, youtube_url: str) -> dict:
 
 def _extract_metadata(youtube_url: str) -> dict:
     """Extract video metadata using yt-dlp --dump-json."""
+    import sys
     cmd = [
-        "yt-dlp",
+        sys.executable, "-m", "yt_dlp",
         "--dump-json",
         "--no-download",
         "--no-warnings",
@@ -102,8 +103,9 @@ def _extract_metadata(youtube_url: str) -> dict:
 
 def _download_video(youtube_url: str, output_path: Path):
     """Download video using yt-dlp."""
+    import sys
     cmd = [
-        "yt-dlp",
+        sys.executable, "-m", "yt_dlp",
         "-f", "bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/best[height<=1080][ext=mp4]/best",
         "-o", str(output_path),
         "--merge-output-format", "mp4",
@@ -125,10 +127,11 @@ def _download_captions(youtube_url: str, downloads_dir: Path) -> Path | None:
     Try to download English captions/subtitles.
     Returns path to the caption file, or None if unavailable.
     """
+    import sys
     # Try manual (human-written) subtitles first, then auto-generated
     for sub_flag in ["--write-subs", "--write-auto-subs"]:
         cmd = [
-            "yt-dlp",
+            sys.executable, "-m", "yt_dlp",
             sub_flag,
             "--sub-lang", "en",
             "--sub-format", "vtt",

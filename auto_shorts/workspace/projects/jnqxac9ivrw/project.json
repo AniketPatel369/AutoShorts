@@ -1,0 +1,20 @@
+{
+  "name": "Me at the zoo",
+  "youtube_url": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+  "created": "2026-06-26T18:19:10.947929",
+  "status": "in_progress",
+  "language": null,
+  "duration_seconds": 19,
+  "clips_found": 0,
+  "version": "1.0",
+  "steps": {
+    "download": "completed",
+    "transcribe": "pending",
+    "crawl_trends": "pending",
+    "analyze": "pending",
+    "score": "pending",
+    "cut": "pending",
+    "caption": "pending",
+    "enhance": "pending"
+  }
+}
