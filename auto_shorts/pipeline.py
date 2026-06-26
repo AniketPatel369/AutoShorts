@@ -19,6 +19,7 @@ from auto_shorts.config import (
 from auto_shorts.models.project import Project
 from auto_shorts.utils.file_utils import sanitize_filename, create_project_dirs
 from auto_shorts.modules.downloader import download
+from auto_shorts.modules.transcriber import transcribe
 
 logger = logging.getLogger(__name__)
 
@@ -131,9 +132,10 @@ def _run_step(step_name: str, project: Project, project_dir: Path):
             project.language = metadata["language"]
 
     elif step_name == "transcribe":
-        # TODO: v0.2 — Whisper transcription
-        logger.warning(f"Step '{step_name}' not yet implemented — skipping")
-        return
+        video_path = str(project_dir / "downloads" / "video.mp4")
+        if not Path(video_path).exists():
+            raise FileNotFoundError(f"Missing video file: {video_path}")
+        transcribe(project_dir, video_path)
 
     elif step_name == "crawl_trends":
         # TODO: v0.6 — Web crawling for trends
