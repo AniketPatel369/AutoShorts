@@ -264,14 +264,16 @@ Find **5 to 8 clips** that would perform best as standalone short-form videos. E
 2. **Diversity**: Pick clips from DIFFERENT parts of the video. Don't cluster all clips from the same section.
 3. **Strong Hook**: The FIRST 3 seconds (first segment) of each clip MUST immediately grab attention. No slow intros.
 4. **Self-Contained**: Each clip must make sense on its own — a viewer who hasn't seen the full video should still find it engaging.
-5. **Ignore Noise**: Lines marked `[AUDIENCE NOISE / LAUGHTER]` or `[REPEATED: ...]` are audience reactions, not dialogue. Use them as SIGNALS that something funny happened nearby, but don't include them as the main content of a clip.
-6. **Score Honestly**: Don't give every clip 90+. Use the full 0-100 range. Only truly viral-worthy clips should score above 80.
+5. **Ignore Noise**: Lines marked `[AUDIENCE NOISE / LAUGHTER]` or `[REPEATED: ...]` are audience reactions, not dialogue. Use them as SIGNALS that something funny happened nearby, but don't include them as the main spoken content of a clip.
+6. **Audience Interactions Priority**: Clips that contain or immediately precede major audience reactions (like `[AUDIENCE NOISE / LAUGHTER]` or `[LAUGHTER]`) perform extremely well as shorts because they contain built-in social proof. Favor these segments.
+7. **Score Honestly**: Don't give every clip 90+. Use the full 0-100 range. Only truly viral-worthy clips should score above 80.
 
 ## Scoring Rubric (use this to calculate the score)
 - **Hook Strength** (0-25): How immediately attention-grabbing are the first 3 seconds?
 - **Entertainment Value** (0-25): How funny, shocking, or emotionally impactful is it?
 - **Shareability** (0-25): Would someone send this to a friend or repost it?
 - **Self-Contained Clarity** (0-25): Does it make sense without context?
+- **Audience Laughter/Reaction Bonus** (Add up to +10 points): If the clip contains, is directly preceded by, or immediately followed by audience laughter (`[AUDIENCE NOISE / LAUGHTER]` or similar reactions), add up to 10 points to the final score (capping the final score at 100). Explicitly state this bonus in the "reason" field.
 
 ## Transcript
 {transcript_text}
