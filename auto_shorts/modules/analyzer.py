@@ -83,9 +83,12 @@ def analyze(project_dir: Path) -> str:
         start_seg = raw_clip.get("start_segment_id")
         end_seg = raw_clip.get("end_segment_id")
         
-        # Resolve timestamps from segment IDs
-        start_ts = segment_lookup.get(start_seg, {}).get("start") if start_seg is not None else None
-        end_ts = segment_lookup.get(end_seg, {}).get("end") if end_seg is not None else None
+        # Resolve and intelligently adjust timestamps to avoid cutting off context mid-sentence
+        if start_seg is not None and end_seg is not None:
+            start_ts, end_ts = _adjust_timestamps_to_context_boundaries(start_seg, end_seg, segments)
+        else:
+            start_ts = None
+            end_ts = None
         
         if start_ts is not None and end_ts is not None and end_ts > start_ts:
             duration = end_ts - start_ts
@@ -131,6 +134,90 @@ def analyze(project_dir: Path) -> str:
     write_json(clips_path, clips)
     
     return str(clips_path)
+
+
+def _adjust_timestamps_to_context_boundaries(start_seg: int, end_seg: int, segments: list) -> tuple[float, float]:
+    """
+    Intelligently adjusts start and end timestamps to avoid cutting off sentences mid-word or mid-thought.
+    Uses word-level punctuation and pauses (silent gaps between words) to find natural boundaries.
+    """
+    # 1. Flatten all words with timestamps
+    flat_words = []
+    for seg in segments:
+        seg_id = seg.get("id")
+        for w in seg.get("words", []):
+            flat_words.append({
+                "word": w.get("word", "").strip(),
+                "start": w.get("start", 0.0),
+                "end": w.get("end", 0.0),
+                "segment_id": seg_id
+            })
+            
+    if not flat_words:
+        return 0.0, 0.0
+        
+    # 2. Find start and end indices matching the segment range
+    start_idx = None
+    end_idx = None
+    
+    for idx, w in enumerate(flat_words):
+        if w["segment_id"] == start_seg and start_idx is None:
+            start_idx = idx
+        if w["segment_id"] == end_seg:
+            end_idx = idx # Keeps updating to find the last word of the end segment
+            
+    if start_idx is None:
+        start_idx = 0
+    if end_idx is None:
+        end_idx = len(flat_words) - 1
+        
+    # Default resolved timestamps from the raw segment IDs
+    start_ts = flat_words[start_idx]["start"]
+    end_ts = flat_words[end_idx]["end"]
+    
+    # 3. Look-behind to find clean start boundary (beginning of a sentence or after a pause)
+    # Look back up to 10 words
+    best_start_idx = start_idx
+    for i in range(start_idx, max(-1, start_idx - 10), -1):
+        if i == 0:
+            best_start_idx = 0
+            break
+            
+        current_word = flat_words[i]
+        prev_word = flat_words[i - 1]
+        
+        # Check if the previous word ends with punctuation (indicating current word starts a sentence)
+        has_punctuation = any(prev_word["word"].endswith(p) for p in [".", "?", "!", "।", "|"])
+        
+        # Check if there was a pause of more than 0.6 seconds before this word
+        has_pause = (current_word["start"] - prev_word["end"]) > 0.6
+        
+        if has_punctuation or has_pause:
+            best_start_idx = i
+            break
+            
+    start_ts = flat_words[best_start_idx]["start"]
+    
+    # 4. Look-ahead to find clean end boundary (end of a sentence or a natural pause)
+    # Look forward up to 15 words
+    best_end_idx = end_idx
+    for i in range(end_idx, min(len(flat_words) - 1, end_idx + 15)):
+        current_word = flat_words[i]
+        next_word = flat_words[i + 1]
+        
+        # Check if the current word ends with punctuation
+        has_punctuation = any(current_word["word"].endswith(p) for p in [".", "?", "!", "।", "|"])
+        
+        # Check if there is a pause of more than 0.6 seconds after this word
+        has_pause = (next_word["start"] - current_word["end"]) > 0.6
+        
+        if has_punctuation or has_pause:
+            best_end_idx = i
+            break
+            
+    end_ts = flat_words[best_end_idx]["end"]
+    
+    return start_ts, end_ts
 
 
 def _clean_transcript(formatted_text: str) -> str:
