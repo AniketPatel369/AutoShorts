@@ -13,7 +13,7 @@ import re
 from pathlib import Path
 from dataclasses import asdict
 
-from auto_shorts.config import MIN_CLIP_DURATION, MAX_CLIP_DURATION
+from auto_shorts.config import MIN_CLIP_DURATION, MAX_CLIP_DURATION, CHUNK_WINDOW_SECONDS, CHUNK_OVERLAP_SECONDS
 from auto_shorts.utils.file_utils import read_json, write_json
 from auto_shorts.utils.llm import ask_json
 
@@ -50,36 +50,55 @@ def analyze(project_dir: Path) -> str:
         write_json(clips_path, [])
         return str(clips_path)
 
-    # 2. Clean transcript and format as numbered segments
+    # 2. Clean transcript and divide into overlapping chunks
     segments = transcript.get("segments", [])
-    formatted_segments, segment_lookup = _format_segments_for_llm(segments)
-    
-    cleaned_text = _clean_transcript(formatted_segments)
-    
-    logger.info(f"Formatted {len(segment_lookup)} segments for LLM (cleaned transcript: {len(cleaned_text)} chars)")
-    
-    # 3. Build Expert Prompt
-    prompt = _build_expert_prompt(video_title, cleaned_text, segment_lookup)
+    chunks = _create_chunks(segments)
+    logger.info(f"Split {len(segments)} segments into {len(chunks)} overlapping chunks of {CHUNK_WINDOW_SECONDS}s (overlap: {CHUNK_OVERLAP_SECONDS}s)")
 
-    logger.info("Sending transcript to LLM for clip extraction...")
+    raw_clips = []
+    max_global_seg_id = segments[-1].get("id", 0) if segments else 0
     
-    try:
-        response_json = ask_json(prompt)
-        write_json(analysis_dir / "debug_llm_output.json", response_json)
-    except Exception as e:
-        logger.error(f"LLM extraction failed: {e}")
-        raise
+    # 3. Analyze each chunk
+    for chunk_idx, chunk_segs in enumerate(chunks):
+        if not chunk_segs:
+            continue
+        chunk_start_seg = chunk_segs[0].get("id", 0)
+        chunk_end_seg = chunk_segs[-1].get("id", 0)
         
-    # 4. Process LLM output and resolve segment timestamps
-    if not isinstance(response_json, list):
-        if isinstance(response_json, dict) and "clips" in response_json:
-            response_json = response_json["clips"]
-        else:
-            logger.error(f"Unexpected LLM output format: {type(response_json)}")
-            response_json = []
+        # Format segments for this chunk
+        formatted_segments, segment_lookup = _format_segments_for_llm(chunk_segs)
+        cleaned_text = _clean_transcript(formatted_segments)
+        
+        chunk_info = f"This chunk covers segments {chunk_start_seg}-{chunk_end_seg} out of a video with segments 0-{max_global_seg_id} total."
+        
+        prompt = _build_expert_prompt(video_title, cleaned_text, segment_lookup, chunk_info)
+        
+        logger.info(f"Sending Chunk {chunk_idx + 1}/{len(chunks)} (seg {chunk_start_seg}-{chunk_end_seg}) to LLM...")
+        
+        try:
+            response_json = ask_json(prompt)
+            # Write debug files for trace
+            write_json(analysis_dir / f"debug_llm_output_chunk_{chunk_idx + 1}.json", response_json)
+            
+            chunk_clips = []
+            if isinstance(response_json, list):
+                chunk_clips = response_json
+            elif isinstance(response_json, dict) and "clips" in response_json:
+                chunk_clips = response_json["clips"]
+                
+            for rc in chunk_clips:
+                if isinstance(rc, dict):
+                    raw_clips.append(rc)
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to analyze Chunk {chunk_idx + 1}: {e}. Continuing with next chunk.")
 
-    clips = []
-    for raw_clip in response_json:
+    # Write combined raw clips to debug file for user transparency
+    write_json(analysis_dir / "debug_llm_output.json", raw_clips)
+    logger.info(f"LLM generated {len(raw_clips)} candidate clips across all chunks")
+
+    # 4. Resolve and adjust timestamps for candidates
+    candidates = []
+    for raw_clip in raw_clips:
         start_seg = raw_clip.get("start_segment_id")
         end_seg = raw_clip.get("end_segment_id")
         
@@ -117,9 +136,9 @@ def analyze(project_dir: Path) -> str:
                 logger.warning(f"Clip too long ({duration:.1f}s > {MAX_CLIP_DURATION + 15}s), skipping: seg {start_seg}-{end_seg}")
                 continue
                 
-            clips.append({
-                "start_seconds": start_ts,
-                "end_seconds": end_ts,
+            candidates.append({
+                "start_seconds": round(start_ts, 2),
+                "end_seconds": round(end_ts, 2),
                 "duration": round(duration, 2),
                 "hook": raw_clip.get("hook", ""),
                 "reason": raw_clip.get("reason", ""),
@@ -128,19 +147,113 @@ def analyze(project_dir: Path) -> str:
                 "start_segment_id": start_seg,
                 "end_segment_id": end_seg,
             })
-        else:
-            logger.warning(
-                f"Could not resolve segment timestamps: "
-                f"start_seg={start_seg} (found={start_ts}), end_seg={end_seg} (found={end_ts})"
-            )
 
-    # Sort by score descending
-    clips = sorted(clips, key=lambda c: c.get("score", 0), reverse=True)
+    # 5. Deduplicate overlapping candidate clips
+    deduped_candidates = _deduplicate_clips(candidates)
+    logger.info(f"Deduplicated candidates count: {len(candidates)} -> {len(deduped_candidates)}")
+
+    # 6. Final spacing/diversity pass (Zero-overlap constraint)
+    sorted_candidates = sorted(deduped_candidates, key=lambda c: c.get("score", 0), reverse=True)
+    final_clips = []
     
-    logger.info(f"Found {len(clips)} valid clips from LLM analysis")
-    write_json(clips_path, clips)
+    for cand in sorted_candidates:
+        c_start = cand["start_seconds"]
+        c_end = cand["end_seconds"]
+        
+        # Check if this candidate overlaps at all with already selected final clips
+        has_overlap = False
+        for selected in final_clips:
+            s_start = selected["start_seconds"]
+            s_end = selected["end_seconds"]
+            # Intersection duration
+            overlap = max(0.0, min(c_end, s_end) - max(c_start, s_start))
+            if overlap > 0.0:
+                has_overlap = True
+                break
+                
+        if not has_overlap:
+            final_clips.append(cand)
+            
+        if len(final_clips) >= 8:
+            break
+            
+    # Chronologically sort the final clips
+    final_clips = sorted(final_clips, key=lambda c: c["start_seconds"])
+    
+    logger.info(f"Selected final {len(final_clips)} disjoint, high-quality clips")
+    write_json(clips_path, final_clips)
     
     return str(clips_path)
+
+
+def _create_chunks(segments: list) -> list[list]:
+    """
+    Split flat segments into overlapping list of chunks based on timestamps in config.
+    """
+    chunks = []
+    if not segments:
+        return chunks
+
+    start_time = segments[0].get("start", 0.0)
+    end_time = segments[-1].get("end", 0.0)
+    step = CHUNK_WINDOW_SECONDS - CHUNK_OVERLAP_SECONDS
+
+    current_start = start_time
+    while current_start < end_time:
+        current_end = current_start + CHUNK_WINDOW_SECONDS
+        
+        # Gather segments in this window
+        chunk_segs = []
+        for seg in segments:
+            seg_start = seg.get("start", 0.0)
+            seg_end = seg.get("end", 0.0)
+            if seg_start < current_end and seg_end > current_start:
+                chunk_segs.append(seg)
+                
+        if chunk_segs:
+            chunks.append(chunk_segs)
+            
+        if current_end >= end_time:
+            break
+        current_start += step
+
+    return chunks
+
+
+def _deduplicate_clips(candidates: list) -> list:
+    """
+    Deduplicates clips that overlap significantly (>50% of the duration of either clip).
+    Keeps the one with the higher score.
+    """
+    # Sort candidates by score descending
+    sorted_candidates = sorted(candidates, key=lambda c: c.get("score", 0), reverse=True)
+    deduped = []
+    
+    for cand in sorted_candidates:
+        c_start = cand["start_seconds"]
+        c_end = cand["end_seconds"]
+        c_dur = c_end - c_start
+        
+        is_duplicate = False
+        for existing in deduped:
+            e_start = existing["start_seconds"]
+            e_end = existing["end_seconds"]
+            e_dur = e_end - e_start
+            
+            # Calculate overlap duration
+            overlap = max(0.0, min(c_end, e_end) - max(c_start, e_start))
+            if overlap > 0.0 and c_dur > 0.0 and e_dur > 0.0:
+                # If the overlap covers more than 50% of either clip, they are duplicates
+                overlap_ratio_cand = overlap / c_dur
+                overlap_ratio_exist = overlap / e_dur
+                if overlap_ratio_cand > 0.5 or overlap_ratio_exist > 0.5:
+                    is_duplicate = True
+                    break
+                    
+        if not is_duplicate:
+            deduped.append(cand)
+            
+    return deduped
 
 
 def _adjust_timestamps_to_context_boundaries(start_seg: int, end_seg: int, segments: list) -> tuple[float, float]:
@@ -300,20 +413,22 @@ def _format_time(seconds: float) -> str:
     return f"{mins}:{secs:02d}"
 
 
-def _build_expert_prompt(video_title: str, transcript_text: str, segment_lookup: dict) -> str:
+def _build_expert_prompt(video_title: str, transcript_text: str, segment_lookup: dict, chunk_info: str = "") -> str:
     """Build a detailed expert prompt for clip extraction."""
     
     max_seg_id = max(segment_lookup.keys()) if segment_lookup else 0
+    chunk_header = f"\n## Current Chunk Information\n{chunk_info}\n" if chunk_info else ""
     
     return f"""You are an expert short-form video editor specializing in TikTok, YouTube Shorts, and Instagram Reels.
 You are analyzing a transcript from a YouTube video to find the MOST ENGAGING, VIRAL-WORTHY segments.
-
+{chunk_header}
 ## Video Info
 - **Title**: "{video_title}"
 - **Total Segments**: {len(segment_lookup)} (IDs from 0 to {max_seg_id})
 
 ## Your Task
-Find **5 to 8 clips** that would perform best as standalone short-form videos. Each clip MUST be between {MIN_CLIP_DURATION} and {MAX_CLIP_DURATION} seconds long.
+Find **1 to 3 clips** that would perform best as standalone short-form videos. Each clip MUST be between {MIN_CLIP_DURATION} and {MAX_CLIP_DURATION} seconds long.
+Only extract the absolute best highlights. If no high-quality, viral-worthy segment exists in this specific chunk, return an empty array `[]`. Do not force clips that aren't engaging just to hit the number.
 
 ## What Makes a Clip Go Viral — Look For These Signals
 

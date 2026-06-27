@@ -30,6 +30,10 @@ OUTPUT_HEIGHT = 1920
 MIN_CLIP_DURATION = 15
 MAX_CLIP_DURATION = 60
 
+# Chunking settings for long transcript analysis
+CHUNK_WINDOW_SECONDS = 180   # 3 minutes window
+CHUNK_OVERLAP_SECONDS = 90   # 1.5 minutes overlap (must be > MAX_CLIP_DURATION)
+
 # Buffer added before/after clip timestamps (seconds)
 CLIP_BUFFER_SECONDS = 1.5
 
