@@ -271,7 +271,8 @@ Find **5 to 8 clips** that would perform best as standalone short-form videos. E
 4. **Self-Contained**: Each clip must make sense on its own — a viewer who hasn't seen the full video should still find it engaging.
 5. **Ignore Noise**: Lines marked `[AUDIENCE NOISE / LAUGHTER]` or `[REPEATED: ...]` are audience reactions, not dialogue. Use them as SIGNALS that something funny happened nearby, but don't include them as the main spoken content of a clip.
 6. **Audience Interactions Priority**: Clips that contain or immediately precede major audience reactions (like `[AUDIENCE NOISE / LAUGHTER]` or `[LAUGHTER]`) perform extremely well as shorts because they contain built-in social proof. Favor these segments.
-7. **Score Honestly**: Don't give every clip 90+. Use the full 0-100 range. Only truly viral-worthy clips should score above 80.
+7. **Contextual Conclusion**: The clip MUST end with a satisfying, complete conclusion to the speaker's sentence or thought. **DO NOT cut off a speaker mid-sentence or mid-phrase.** If a sentence continues into the next segments, expand `end_segment_id` to include all segments necessary to complete the thought, joke punchline, or quote. The viewer must hear the final word and conclusion clearly.
+8. **Score Honestly**: Don't give every clip 90+. Use the full 0-100 range. Only truly viral-worthy clips should score above 80.
 
 ## Scoring Rubric (use this to calculate the score)
 - **Hook Strength** (0-25): How immediately attention-grabbing are the first 3 seconds?
