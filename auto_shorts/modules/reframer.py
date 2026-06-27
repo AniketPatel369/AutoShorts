@@ -15,7 +15,6 @@ import numpy as np
 import cv2
 import mediapipe as mp
 from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
 from auto_shorts.config import PROJECT_ROOT
 
 logger = logging.getLogger(__name__)
@@ -125,6 +124,7 @@ def reframe_active_speaker(
     max_missing_frames = int(fps * 0.4) # ~400ms
     
     # Initialize the FaceLandmarker detector
+    vision = python.vision
     model_path = str(PROJECT_ROOT / "models" / "face_landmarker.task")
     base_options = python.BaseOptions(model_asset_path=model_path)
     options = vision.FaceLandmarkerOptions(
