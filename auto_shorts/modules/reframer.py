@@ -360,15 +360,19 @@ def reframe_active_speaker(
             else:
                 target_centers.append(default_center)
                 
-    # 6. Apply Exponential Moving Average (EMA) Smoothing
+    # 6. Apply Two-Stage Median Filter + Dead-Zone EMA Smoothing
     smoothed_centers = []
-    alpha = 0.12  # Smoothing factor (panning speed)
+    alpha = 0.06  # Reduced from 0.12 for smoother, slower camera panning
+    deadzone_px = 0.015 * width  # 1.5% of frame width (approx 29px for 1080p width)
+    median_window = max(5, int(fps * 0.5))  # ~0.5s window
     
     current_smooth = None
     
     # Keep track of when we last saw any faces
     last_face_seen_idx = -9999
     
+    # Pre-build raw targets with center fallback defaults
+    final_raw_targets = []
     for f_idx in range(total_frames):
         has_faces = len(frame_faces[f_idx]) > 0
         if has_faces:
@@ -376,15 +380,33 @@ def reframe_active_speaker(
             
         # Fallback to frame center if no face has been seen for > 1.0s (fps frames)
         if f_idx - last_face_seen_idx > int(fps):
-            target = default_center
+            final_raw_targets.append(default_center)
         else:
-            target = target_centers[f_idx]
+            final_raw_targets.append(target_centers[f_idx])
             
+    # Apply rolling median and dead-zone EMA
+    for f_idx in range(total_frames):
+        # Extract median window
+        w_start = max(0, f_idx - median_window + 1)
+        w_end = f_idx + 1
+        
+        x_coords = [final_raw_targets[i][0] for i in range(w_start, w_end)]
+        y_coords = [final_raw_targets[i][1] for i in range(w_start, w_end)]
+        
+        target_x = int(np.median(x_coords))
+        target_y = int(np.median(y_coords))
+        
         if current_smooth is None:
-            current_smooth = np.array(target, dtype=np.float32)
+            current_smooth = np.array([target_x, target_y], dtype=np.float32)
         else:
-            current_smooth = current_smooth * (1.0 - alpha) + np.array(target, dtype=np.float32) * alpha
-            
+            # Deadzone on X axis
+            if abs(target_x - current_smooth[0]) > deadzone_px:
+                current_smooth[0] += (target_x - current_smooth[0]) * alpha
+                
+            # Deadzone on Y axis
+            if abs(target_y - current_smooth[1]) > deadzone_px:
+                current_smooth[1] += (target_y - current_smooth[1]) * alpha
+                
         smoothed_centers.append((int(current_smooth[0]), int(current_smooth[1])))
         
     # 7. Render Vertically Cropped Video (Pass 2)
