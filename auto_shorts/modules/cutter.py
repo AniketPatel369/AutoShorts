@@ -72,38 +72,55 @@ def cut(project_dir: Path) -> str:
 
 def _cut_single_clip(video_path: str, output_path: str, start: float, end: float, buffer: float):
     """
-    Cut a single clip, re-encoding it to crop to a 9:16 vertical center aspect ratio.
+    Cut a single clip, then apply active-speaker-aware vertical reframing.
     """
+    import tempfile
+    import os
+    from auto_shorts.modules.reframer import reframe_active_speaker
+    
     start_buffered = max(0.0, start - buffer)
     duration = (end - start) + (buffer * 2)
     
+    # 1. Cut the segment from source video without cropping (keep landscape)
+    temp_fd, temp_landscape_path = tempfile.mkstemp(suffix=".mp4")
+    os.close(temp_fd)
+    
     try:
+        logger.info(f"Cutting temporary landscape segment for active speaker detection...")
         stream = ffmpeg.input(video_path, ss=start_buffered, t=duration)
-        
-        # Crop center to 9:16 aspect ratio (e.g., 1080x1920)
-        # Using ih*9/16 as width to always match the source height in a vertical slice
-        video = stream.video.filter('crop', 'ih*9/16', 'ih')
-        
-        # Scale to standard shorts resolution if needed
-        video = video.filter('scale', OUTPUT_WIDTH, OUTPUT_HEIGHT)
-        
+        video = stream.video
         audio = stream.audio
         
-        # We must re-encode video because of the crop/scale filters
+        # Output uncropped landscape video segment
         out = ffmpeg.output(
-            video, audio, output_path,
+            video, audio, temp_landscape_path,
             vcodec='libx264',
             acodec='aac',
             preset='fast',
             crf=23
         )
-        
-        # Suppress massive ffmpeg logs, run quietly
         out.run(quiet=True, overwrite_output=True)
         
-    except ffmpeg.Error as e:
-        logger.error(f"FFmpeg error: {e.stderr.decode('utf-8') if e.stderr else str(e)}")
-        raise RuntimeError("Failed to cut clip") from e
+        # 2. Run active-speaker-aware reframing on the cut segment
+        # Pass empty audio_path to let reframer extract audio from the cut segment
+        reframe_active_speaker(
+            video_path=temp_landscape_path,
+            audio_path="",
+            aspect_ratio="9:16",
+            out_path=output_path,
+            debug=True # Enable debug overlay for visual validation
+        )
+        
+    except Exception as e:
+        logger.error(f"Error during active speaker reframing: {e}")
+        raise RuntimeError("Failed to reframe clip") from e
+    finally:
+        # Clean up temp landscape clip
+        if os.path.exists(temp_landscape_path):
+            try:
+                os.remove(temp_landscape_path)
+            except OSError:
+                pass
 
 # ── Standalone test ──────────────────────────────────────
 if __name__ == "__main__":
