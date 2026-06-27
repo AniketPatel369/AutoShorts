@@ -41,9 +41,6 @@ def cut(project_dir: Path) -> str:
         
     output_dir = project_dir / "output"
     
-    # Process only top 3 clips for now to save time
-    clips_data = clips_data[:3]
-    
     if not clips_data:
         logger.warning("No clips to cut")
         return str(output_dir)
@@ -54,7 +51,8 @@ def cut(project_dir: Path) -> str:
         # Build Clip object
         clip = Clip(id=i, **{k: v for k, v in clip_dict.items() if k in Clip.__annotations__})
         
-        output_path = output_dir / f"clip_{i:03d}.mp4"
+        score = clip_dict.get("score", 0)
+        output_path = output_dir / f"clip_{i:02d}_score_{score}.mp4"
         
         if output_path.exists():
             logger.info(f"Clip {i} already exists at {output_path.name}, skipping")

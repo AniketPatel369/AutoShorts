@@ -7,3 +7,7 @@ venv/
 
 # Workspace data
 auto_shorts/workspace/
+
+# Local models storage (heavy binaries)
+/models/
+chnages_i need_when i tested.md

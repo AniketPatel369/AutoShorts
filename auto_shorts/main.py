@@ -53,6 +53,26 @@ def cmd_resume(args):
         sys.exit(1)
 
     project, project_dir = resume_project(project_dir)
+    
+    # Handle --reanalyze flag
+    if hasattr(args, 'reanalyze') and args.reanalyze:
+        print("🔄 Re-analyzing: resetting analyze/score/cut steps...")
+        # Delete old clips files
+        analysis_dir = project_dir / "analysis"
+        for f in ["clips_raw.json", "clips_scored.json", "debug_llm_output.json"]:
+            path = analysis_dir / f
+            if path.exists():
+                path.unlink()
+        # Delete old output clips
+        output_dir = project_dir / "output"
+        if output_dir.exists():
+            for clip_file in output_dir.glob("clip_*.mp4"):
+                clip_file.unlink()
+        # Reset step statuses
+        for step in ["analyze", "score", "cut"]:
+            project.steps[step] = "pending"
+        project.save(project_dir)
+    
     print(f"\n📁 Resuming: {project.name}")
 
     stop_after = args.stop_after if hasattr(args, "stop_after") else None
@@ -166,6 +186,7 @@ def main():
     p_resume = subparsers.add_parser("resume", help="Resume an existing project")
     p_resume.add_argument("project", help="Project name or directory name")
     p_resume.add_argument("--stop-after", default=None, help="Stop after this step")
+    p_resume.add_argument("--reanalyze", action="store_true", help="Re-run analyze/score/cut steps (deletes old clips)")
     p_resume.set_defaults(func=cmd_resume)
 
     # ── list ─────────────────────────────────────────────

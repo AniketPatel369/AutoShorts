@@ -2,12 +2,14 @@
 Auto Shorts — Module: Analyzer
 
 Passes transcript to LLM to find the most engaging short-form clip candidates.
+Uses segment-based timestamps and detailed expert prompting for high-quality clips.
 
 Input:  analysis/transcript.json, downloads/metadata.json
 Output: analysis/clips_raw.json
 """
 import json
 import logging
+import re
 from pathlib import Path
 from dataclasses import asdict
 
@@ -40,86 +42,78 @@ def analyze(project_dir: Path) -> str:
     metadata = read_json(metadata_path) if metadata_path.exists() else {}
     
     video_title = metadata.get("title", "Unknown Video")
-    full_text = transcript.get("text", "")
     
     # Fast paths for short videos
+    full_text = transcript.get("text", "")
     if len(full_text.split()) < 50:
         logger.warning("Transcript is too short for meaningful analysis")
         write_json(clips_path, [])
         return str(clips_path)
-        
-    # TODO: Chunking for very long transcripts
-    # For v0.3, we assume the transcript fits in the context window (8k tokens for llama3.1)
+
+    # 2. Clean transcript and format as numbered segments
+    segments = transcript.get("segments", [])
+    formatted_segments, segment_lookup = _format_segments_for_llm(segments)
     
-    # 2. Build Prompt
-    prompt = f"""
-You are an expert short-form video editor (TikTok, YouTube Shorts, Reels).
-Your job is to read the transcript of a YouTube video and find the most engaging, viral segments.
-
-Video Title: "{video_title}"
-
-Constraints for each clip:
-1. Duration: Must be between {MIN_CLIP_DURATION} and {MAX_CLIP_DURATION} seconds.
-2. Must have a strong hook (first 3 seconds).
-3. Must be a complete, self-contained thought.
-4. Extract the exact text for the start and end of the clip so we can find the timestamps.
-
-Transcript:
-{full_text}
-
-Output format requirements:
-Provide the output as a JSON array of objects. Each object must have:
-- "hook": A short description of why the first 3 seconds grab attention.
-- "reason": Why this clip will go viral.
-- "score": A score from 0-100 estimating virality.
-- "start_text": The exact first 5-10 words of the clip (copy-pasted from the transcript).
-- "end_text": The exact last 5-10 words of the clip (copy-pasted from the transcript).
-
-Output ONLY JSON. No explanation.
-"""
+    cleaned_text = _clean_transcript(formatted_segments)
+    
+    logger.info(f"Formatted {len(segment_lookup)} segments for LLM (cleaned transcript: {len(cleaned_text)} chars)")
+    
+    # 3. Build Expert Prompt
+    prompt = _build_expert_prompt(video_title, cleaned_text, segment_lookup)
 
     logger.info("Sending transcript to LLM for clip extraction...")
     
     try:
         response_json = ask_json(prompt)
+        write_json(analysis_dir / "debug_llm_output.json", response_json)
     except Exception as e:
         logger.error(f"LLM extraction failed: {e}")
         raise
         
-    # 3. Process LLM output and match timestamps
+    # 4. Process LLM output and resolve segment timestamps
     if not isinstance(response_json, list):
         if isinstance(response_json, dict) and "clips" in response_json:
             response_json = response_json["clips"]
         else:
-            logger.error(f"Unexpected LLM output format: {response_json}")
+            logger.error(f"Unexpected LLM output format: {type(response_json)}")
             response_json = []
 
     clips = []
     for raw_clip in response_json:
-        start_text = raw_clip.get("start_text", "")
-        end_text = raw_clip.get("end_text", "")
+        start_seg = raw_clip.get("start_segment_id")
+        end_seg = raw_clip.get("end_segment_id")
         
-        # Simple fuzzy matching (future: use sentence-transformers or fuzzywuzzy)
-        start_ts = _find_timestamp(transcript, start_text, from_end=False)
-        end_ts = _find_timestamp(transcript, end_text, from_end=True)
+        # Resolve timestamps from segment IDs
+        start_ts = segment_lookup.get(start_seg, {}).get("start") if start_seg is not None else None
+        end_ts = segment_lookup.get(end_seg, {}).get("end") if end_seg is not None else None
         
         if start_ts is not None and end_ts is not None and end_ts > start_ts:
             duration = end_ts - start_ts
-            if MIN_CLIP_DURATION <= duration <= MAX_CLIP_DURATION + 10:  # Allow some leniency
-                clips.append({
-                    "start_seconds": start_ts,
-                    "end_seconds": end_ts,
-                    "duration": duration,
-                    "hook": raw_clip.get("hook", ""),
-                    "reason": raw_clip.get("reason", ""),
-                    "score": raw_clip.get("score", 0),
-                    "start_text": start_text,
-                    "end_text": end_text
-                })
-            else:
-                logger.debug(f"Discarding clip: duration {duration}s out of bounds")
+            
+            if duration < MIN_CLIP_DURATION:
+                logger.warning(f"Clip too short ({duration:.1f}s < {MIN_CLIP_DURATION}s), skipping: seg {start_seg}-{end_seg}")
+                continue
+            
+            if duration > MAX_CLIP_DURATION + 15:
+                logger.warning(f"Clip too long ({duration:.1f}s > {MAX_CLIP_DURATION + 15}s), skipping: seg {start_seg}-{end_seg}")
+                continue
+                
+            clips.append({
+                "start_seconds": start_ts,
+                "end_seconds": end_ts,
+                "duration": round(duration, 2),
+                "hook": raw_clip.get("hook", ""),
+                "reason": raw_clip.get("reason", ""),
+                "category": raw_clip.get("category", ""),
+                "score": raw_clip.get("score", 0),
+                "start_segment_id": start_seg,
+                "end_segment_id": end_seg,
+            })
         else:
-            logger.debug(f"Could not reliably match timestamps for clip: '{start_text}'")
+            logger.warning(
+                f"Could not resolve segment timestamps: "
+                f"start_seg={start_seg} (found={start_ts}), end_seg={end_seg} (found={end_ts})"
+            )
 
     # Sort by score descending
     clips = sorted(clips, key=lambda c: c.get("score", 0), reverse=True)
@@ -130,60 +124,161 @@ Output ONLY JSON. No explanation.
     return str(clips_path)
 
 
-def _find_timestamp(transcript: dict, text_snippet: str, from_end: bool = False) -> float | None:
+def _clean_transcript(formatted_text: str) -> str:
     """
-    Very naive string search to find the timestamp of a text snippet.
-    Iterates through word-level timestamps in the transcript.
+    Clean transcript noise before sending to LLM.
+    Collapses repeated words (audience cheering/laughter misidentified by Whisper).
     """
-    if not text_snippet:
-        return None
-        
-    # Clean the search text
-    search_words = [w.lower().strip(".,!?'\"") for w in text_snippet.split() if w.strip()]
-    if not search_words:
-        return None
-        
-    # Flatten all words from all segments
-    all_words = []
-    for seg in transcript.get("segments", []):
-        for w in seg.get("words", []):
-            clean_word = w.get("word", "").lower().strip(".,!?'\"")
-            if clean_word:
-                all_words.append({
-                    "word": clean_word,
-                    "start": w.get("start", 0),
-                    "end": w.get("end", 0)
-                })
-
-    if not all_words:
-        return None
-
-    # Search for a match of the first few words
-    search_len = min(len(search_words), 5)  # Match up to 5 words
-    best_match_idx = -1
+    # Collapse repeated Hindi filler words (हेलो, हो, etc.)
+    # Pattern: same word repeated 4+ times in a row
+    def collapse_repeats(text: str) -> str:
+        # Match any word repeated 4+ times (works for Hindi and English)
+        pattern = r'\b(\S+?)(?:\s+\1){3,}\b'
+        result = re.sub(pattern, r'[REPEATED: \1]', text, flags=re.UNICODE)
+        return result
     
-    # Iterate to find the sequence
-    for i in range(len(all_words) - search_len + 1):
-        match_count = 0
-        for j in range(search_len):
-            if all_words[i+j]["word"] == search_words[j]:
-                match_count += 1
-                
-        if match_count >= max(1, search_len - 1):  # Allow 1 word mismatch
-            best_match_idx = i
-            if not from_end:
-                break  # If looking for start, take first match
-            # If looking for end, keep going to find the last match
+    cleaned = collapse_repeats(formatted_text)
+    
+    # Also collapse lines that are purely noise markers
+    lines = cleaned.split('\n')
+    cleaned_lines = []
+    for line in lines:
+        # Skip lines that are entirely repeated noise
+        stripped = line.strip()
+        if stripped and not re.match(r'^\[SEG \d+.*?\]\s*(\[REPEATED:.*?\]\s*)+$', stripped):
+            cleaned_lines.append(line)
+        elif stripped:
+            # Keep the segment marker but note it's noise
+            seg_match = re.match(r'(\[SEG \d+ \| [\d:.]+\s*-\s*[\d:.]+\])', stripped)
+            if seg_match:
+                cleaned_lines.append(f"{seg_match.group(1)} [AUDIENCE NOISE / LAUGHTER]")
+            else:
+                cleaned_lines.append(line)
+
+    return '\n'.join(cleaned_lines)
+
+
+def _format_segments_for_llm(segments: list) -> tuple[str, dict]:
+    """
+    Format transcript segments as numbered lines with timestamps.
+    Returns (formatted_text, segment_lookup_dict).
+    
+    Example output:
+        [SEG 0 | 0:02 - 0:04] हेलो हेलो
+        [SEG 1 | 0:04 - 0:08] यह वला भाई करो करो करो
+    """
+    lines = []
+    lookup = {}
+    
+    for seg in segments:
+        seg_id = seg.get("id", 0)
+        start = seg.get("start", 0.0)
+        end = seg.get("end", 0.0)
+        text = seg.get("text", "").strip()
+        
+        if not text:
+            continue
             
-    if best_match_idx != -1:
-        if from_end:
-            # Return the end timestamp of the last word in the matched sequence
-            return all_words[best_match_idx + search_len - 1]["end"]
-        else:
-            # Return the start timestamp of the first word
-            return all_words[best_match_idx]["start"]
-            
-    return None
+        start_fmt = _format_time(start)
+        end_fmt = _format_time(end)
+        
+        lines.append(f"[SEG {seg_id} | {start_fmt} - {end_fmt}] {text}")
+        lookup[seg_id] = {"start": start, "end": end, "text": text}
+    
+    return '\n'.join(lines), lookup
+
+
+def _format_time(seconds: float) -> str:
+    """Format seconds as M:SS or H:MM:SS."""
+    mins, secs = divmod(int(seconds), 60)
+    hours, mins = divmod(mins, 60)
+    if hours > 0:
+        return f"{hours}:{mins:02d}:{secs:02d}"
+    return f"{mins}:{secs:02d}"
+
+
+def _build_expert_prompt(video_title: str, transcript_text: str, segment_lookup: dict) -> str:
+    """Build a detailed expert prompt for clip extraction."""
+    
+    max_seg_id = max(segment_lookup.keys()) if segment_lookup else 0
+    
+    return f"""You are an expert short-form video editor specializing in TikTok, YouTube Shorts, and Instagram Reels.
+You are analyzing a transcript from a YouTube video to find the MOST ENGAGING, VIRAL-WORTHY segments.
+
+## Video Info
+- **Title**: "{video_title}"
+- **Total Segments**: {len(segment_lookup)} (IDs from 0 to {max_seg_id})
+
+## Your Task
+Find **5 to 8 clips** that would perform best as standalone short-form videos. Each clip MUST be between {MIN_CLIP_DURATION} and {MAX_CLIP_DURATION} seconds long.
+
+## What Makes a Clip Go Viral — Look For These Signals
+
+### 🎯 Category 1: PUNCHLINES & JOKES
+- A joke with a clear setup and punchline
+- Dark humor, wordplay, or unexpected twists
+- Double entendres or clever callbacks
+
+### 🔥 Category 2: ROASTS & BURNS  
+- One person roasting another with a savage comeback
+- Playful insults that make the audience lose it
+- Self-deprecating humor that hits hard
+
+### 💣 Category 3: HOT TAKES & CONTROVERSY
+- Bold, controversial, or unpopular opinions stated confidently
+- Moments where someone says something shocking or taboo
+- Debates or arguments that escalate quickly
+
+### 😂 Category 4: AUDIENCE ERUPTION
+- Moments right before or during massive audience laughter
+- When a joke lands SO hard the speaker can't even continue
+- Standing ovation or collective gasp moments
+
+### 💬 Category 5: QUOTABLE ONE-LINERS
+- Short, punchy statements people would share or screenshot
+- Motivational or philosophical bombs dropped casually
+- Memorable catchphrases or iconic moments
+
+### 🤯 Category 6: ABSURD / UNEXPECTED MOMENTS
+- Something completely random or unexpected happening
+- When the conversation takes a wild, unplanned turn
+- Breaking character or fourth-wall moments
+
+### ❤️ Category 7: EMOTIONAL / REAL MOMENTS
+- Genuine vulnerability or heartfelt confession
+- A real, raw moment that breaks through the comedy
+- Touching stories or personal revelations
+
+## CRITICAL RULES
+
+1. **Use segment IDs**: Each line in the transcript starts with `[SEG <id> | <time>]`. You MUST reference these IDs.
+2. **Diversity**: Pick clips from DIFFERENT parts of the video. Don't cluster all clips from the same section.
+3. **Strong Hook**: The FIRST 3 seconds (first segment) of each clip MUST immediately grab attention. No slow intros.
+4. **Self-Contained**: Each clip must make sense on its own — a viewer who hasn't seen the full video should still find it engaging.
+5. **Ignore Noise**: Lines marked `[AUDIENCE NOISE / LAUGHTER]` or `[REPEATED: ...]` are audience reactions, not dialogue. Use them as SIGNALS that something funny happened nearby, but don't include them as the main content of a clip.
+6. **Score Honestly**: Don't give every clip 90+. Use the full 0-100 range. Only truly viral-worthy clips should score above 80.
+
+## Scoring Rubric (use this to calculate the score)
+- **Hook Strength** (0-25): How immediately attention-grabbing are the first 3 seconds?
+- **Entertainment Value** (0-25): How funny, shocking, or emotionally impactful is it?
+- **Shareability** (0-25): Would someone send this to a friend or repost it?
+- **Self-Contained Clarity** (0-25): Does it make sense without context?
+
+## Transcript
+{transcript_text}
+
+## Output Format
+Return a JSON array. Each object MUST have these fields:
+- `"start_segment_id"`: (integer) The segment ID where the clip starts
+- `"end_segment_id"`: (integer) The segment ID where the clip ends
+- `"hook"`: (string) What makes the first 3 seconds grab attention
+- `"reason"`: (string) Why this specific clip will go viral (be specific, not generic)
+- `"category"`: (string) One of: "punchline", "roast", "hot_take", "audience_eruption", "quotable", "absurd", "emotional"
+- `"score"`: (integer 0-100) Virality score using the rubric above
+
+Output ONLY the JSON array. No explanation before or after.
+"""
+
 
 # ── Standalone test ──────────────────────────────────────
 if __name__ == "__main__":

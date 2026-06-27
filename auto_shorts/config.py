@@ -8,17 +8,18 @@ from pathlib import Path
 
 # ─── Workspace ───────────────────────────────────────────
 # Root directory where all projects live
-PROJECT_ROOT = Path(__file__).parent
-WORKSPACE_DIR = PROJECT_ROOT / "workspace"
+PROJECT_ROOT = Path(__file__).parent.parent.absolute()
+WORKSPACE_DIR = PROJECT_ROOT / "auto_shorts" / "workspace"
 PROJECTS_DIR = WORKSPACE_DIR / "projects"
 LOGS_DIR = WORKSPACE_DIR / "logs"
+MODELS_DIR = PROJECT_ROOT / "models"
 
 # ─── AI Models ───────────────────────────────────────────
-# Ollama LLM
-LLM_MODEL = "llama3.1:8b"
+# MLX-LM (runs locally via Apple MLX, no server needed)
+LLM_MODEL = "mlx-community/Qwen2.5-14B-Instruct-4bit"
 
-# Whisper STT (Using small for faster downloads/transcription, can change to large-v3 later)
-WHISPER_MODEL = "small"
+# Whisper STT
+WHISPER_MODEL = "large-v3"
 
 # ─── Video Settings ──────────────────────────────────────
 # Shorts format: 9:16 vertical
@@ -65,3 +66,4 @@ def ensure_workspace():
     """Create workspace directories if they don't exist."""
     PROJECTS_DIR.mkdir(parents=True, exist_ok=True)
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)

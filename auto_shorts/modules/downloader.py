@@ -125,11 +125,36 @@ def _download_video(youtube_url: str, output_path: Path):
 
 def _download_captions(youtube_url: str, downloads_dir: Path) -> Path | None:
     """
-    Try to download English captions/subtitles.
+    Try to download captions/subtitles.
+    Attempts json3 format first (has word-level timestamps), then vtt.
     Returns path to the caption file, or None if unavailable.
     """
     import sys
-    # Try manual (human-written) subtitles first, then auto-generated
+    
+    # Try json3 format first (word-level timestamps for YouTube auto-captions)
+    # Try both auto-subs and manual subs, for multiple languages
+    for sub_flag in ["--write-auto-subs", "--write-subs"]:
+        for sub_lang in ["en", "hi", "en,hi"]:
+            cmd = [
+                sys.executable, "-m", "yt_dlp",
+                sub_flag,
+                "--sub-lang", sub_lang,
+                "--sub-format", "json3",
+                "--skip-download",
+                "--no-warnings",
+                "--no-playlist",
+                "-o", str(downloads_dir / "captions"),
+                youtube_url,
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+            
+            # Check if any json3 file was created
+            json3_files = list(downloads_dir.glob("captions*.json3"))
+            if json3_files:
+                logger.info(f"Downloaded json3 captions: {json3_files[0].name}")
+                return json3_files[0]
+    
+    # Fallback: try vtt format
     for sub_flag in ["--write-subs", "--write-auto-subs"]:
         cmd = [
             sys.executable, "-m", "yt_dlp",

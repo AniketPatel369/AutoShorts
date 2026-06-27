@@ -13,7 +13,10 @@ class Clip:
     duration: float
     hook: str = ""
     reason: str = ""
+    category: str = ""
     score: int = 0
     start_text: str = ""
     end_text: str = ""
+    start_segment_id: int = -1
+    end_segment_id: int = -1
     output_path: str = ""
