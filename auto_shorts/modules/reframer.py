@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 import numpy as np
 import cv2
-import mediapipe as mp
+import mediapipe.solutions.face_mesh as mp_face_mesh
 
 logger = logging.getLogger(__name__)
 
@@ -110,7 +110,7 @@ def reframe_active_speaker(
     
     # 3. Pass 1: Face Landmark Detection & Tracking
     logger.info("Pass 1: Detecting faces and tracking landmarks...")
-    mp_face_mesh = mp.solutions.face_mesh
+    # mp_face_mesh is imported directly at module level
     
     # Store tracked face data per frame
     # frame_faces[frame_idx] = { face_id: { 'bbox': [xmin, ymin, xmax, ymax], 'center': (x, y), 'mouth_open': val } }
