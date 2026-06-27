@@ -62,10 +62,10 @@ def cut(project_dir: Path) -> str:
             video_path=str(video_path),
             output_path=str(output_path),
             start=clip.start_seconds,
-            end=clip.end_seconds,
+            end=clip.end_seconds + 5.0,
             buffer=CLIP_BUFFER_SECONDS
         )
-        logger.info(f"✓ Cut clip {i}: {output_path.name} ({clip.duration:.1f}s)")
+        logger.info(f"✓ Cut clip {i}: {output_path.name} ({clip.duration + 5.0:.1f}s)")
         
     return str(output_dir)
 
