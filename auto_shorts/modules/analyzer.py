@@ -258,6 +258,11 @@ Find **5 to 8 clips** that would perform best as standalone short-form videos. E
 - A real, raw moment that breaks through the comedy
 - Touching stories or personal revelations
 
+### 💪 Category 8: MOTIVATIONAL & INSPIRATIONAL
+- Deep, inspiring statements about success, mindset, work ethic, or overcoming struggles
+- Speeches or advice that make the viewer want to take action immediately
+- Core truth bombs that shift the perspective of the listener
+
 ## CRITICAL RULES
 
 1. **Use segment IDs**: Each line in the transcript starts with `[SEG <id> | <time>]`. You MUST reference these IDs.
@@ -284,7 +289,7 @@ Return a JSON array. Each object MUST have these fields:
 - `"end_segment_id"`: (integer) The segment ID where the clip ends
 - `"hook"`: (string) What makes the first 3 seconds grab attention
 - `"reason"`: (string) Why this specific clip will go viral (be specific, not generic)
-- `"category"`: (string) One of: "punchline", "roast", "hot_take", "audience_eruption", "quotable", "absurd", "emotional"
+- `"category"`: (string) One of: "punchline", "roast", "hot_take", "audience_eruption", "quotable", "absurd", "emotional", "motivational"
 - `"score"`: (integer 0-100) Virality score using the rubric above
 
 Output ONLY the JSON array. No explanation before or after.
