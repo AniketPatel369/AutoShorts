@@ -20,6 +20,7 @@ from auto_shorts.models.project import Project
 from auto_shorts.utils.file_utils import sanitize_filename, create_project_dirs
 from auto_shorts.modules.downloader import download
 from auto_shorts.modules.transcriber import transcribe
+from auto_shorts.modules.trend_crawler import crawl_trends
 from auto_shorts.modules.analyzer import analyze
 from auto_shorts.modules.cutter import cut
 
@@ -140,9 +141,7 @@ def _run_step(step_name: str, project: Project, project_dir: Path):
         transcribe(project_dir, video_path)
 
     elif step_name == "crawl_trends":
-        # TODO: v0.6 — Web crawling for trends
-        logger.warning(f"Step '{step_name}' not yet implemented — skipping")
-        return
+        crawl_trends(project_dir)
 
     elif step_name == "analyze":
         analyze(project_dir)
