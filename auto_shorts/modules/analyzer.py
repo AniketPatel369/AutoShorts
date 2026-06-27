@@ -93,13 +93,20 @@ def analyze(project_dir: Path) -> str:
         if start_ts is not None and end_ts is not None and end_ts > start_ts:
             duration = end_ts - start_ts
             
-            # If clip is short (between 10s and MIN_CLIP_DURATION), auto-pad start and end equally to reach MIN_CLIP_DURATION
-            if duration < MIN_CLIP_DURATION and duration >= 10.0:
+            # If clip is short (under MIN_CLIP_DURATION), auto-pad start and end to reach MIN_CLIP_DURATION
+            if duration < MIN_CLIP_DURATION and duration > 0.0:
                 needed = MIN_CLIP_DURATION - duration
                 pad = needed / 2.0
-                logger.info(f"Clip (seg {start_seg}-{end_seg}) is {duration:.1f}s — auto-padding by {pad:.1f}s on both ends to reach {MIN_CLIP_DURATION}s")
-                start_ts = max(0.0, start_ts - pad)
-                end_ts = end_ts + pad
+                
+                new_start = max(0.0, start_ts - pad)
+                actual_start_pad = start_ts - new_start
+                remaining_pad = needed - actual_start_pad
+                new_end = end_ts + remaining_pad
+                
+                logger.info(f"Clip (seg {start_seg}-{end_seg}) is {duration:.1f}s — auto-padding to reach {MIN_CLIP_DURATION}s (start_pad={actual_start_pad:.1f}s, end_pad={remaining_pad:.1f}s)")
+                
+                start_ts = new_start
+                end_ts = new_end
                 duration = end_ts - start_ts
             
             if duration < MIN_CLIP_DURATION:
