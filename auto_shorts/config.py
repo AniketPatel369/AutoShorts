@@ -27,7 +27,7 @@ OUTPUT_WIDTH = 1080
 OUTPUT_HEIGHT = 1920
 
 # Clip duration limits (seconds)
-MIN_CLIP_DURATION = 15
+MIN_CLIP_DURATION = 10
 MAX_CLIP_DURATION = 60
 
 # Buffer added before/after clip timestamps (seconds)
