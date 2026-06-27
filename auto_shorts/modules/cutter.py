@@ -108,7 +108,7 @@ def _cut_single_clip(video_path: str, output_path: str, start: float, end: float
             audio_path="",
             aspect_ratio="9:16",
             out_path=output_path,
-            debug=True # Enable debug overlay for visual validation
+            debug=False # Disable debug overlay for clean final render
         )
         
     except Exception as e:
