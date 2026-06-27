@@ -13,7 +13,10 @@ import os
 from pathlib import Path
 import numpy as np
 import cv2
-import mediapipe.solutions.face_mesh as mp_face_mesh
+import mediapipe as mp
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
+from auto_shorts.config import PROJECT_ROOT
 
 logger = logging.getLogger(__name__)
 
@@ -109,11 +112,9 @@ def reframe_active_speaker(
     logger.info(f"Speech detection threshold set to: {speech_threshold:.4f} (max energy: {max_energy:.4f})")
     
     # 3. Pass 1: Face Landmark Detection & Tracking
-    logger.info("Pass 1: Detecting faces and tracking landmarks...")
-    # mp_face_mesh is imported directly at module level
+    logger.info("Pass 1: Detecting faces and tracking landmarks using FaceLandmarker Tasks API...")
     
     # Store tracked face data per frame
-    # frame_faces[frame_idx] = { face_id: { 'bbox': [xmin, ymin, xmax, ymax], 'center': (x, y), 'mouth_open': val } }
     frame_faces = [{} for _ in range(total_frames)]
     
     # Face tracker tracks: face_id -> {'last_box': [xmin, ymin, xmax, ymax], 'last_seen': frame_idx, 'mouth_history': []}
@@ -123,29 +124,33 @@ def reframe_active_speaker(
     # Max frames a track can be missing before being closed
     max_missing_frames = int(fps * 0.4) # ~400ms
     
-    with mp_face_mesh.FaceMesh(
-        max_num_faces=4,
-        refine_landmarks=True,
-        min_detection_confidence=0.5,
-        min_tracking_confidence=0.5
-    ) as face_mesh:
-        
+    # Initialize the FaceLandmarker detector
+    model_path = str(PROJECT_ROOT / "models" / "face_landmarker.task")
+    base_options = python.BaseOptions(model_asset_path=model_path)
+    options = vision.FaceLandmarkerOptions(
+        base_options=base_options,
+        output_face_blendshapes=False,
+        num_faces=4
+    )
+    
+    with vision.FaceLandmarker.create_from_options(options) as detector:
         frame_idx = 0
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret or frame_idx >= total_frames:
                 break
                 
-            # Convert to RGB for MediaPipe
+            # Convert to RGB for MediaPipe and wrap in mp.Image
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            results = face_mesh.process(rgb_frame)
+            mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
+            results = detector.detect(mp_image)
             
             detections = []
-            if results.multi_face_landmarks:
-                for face_landmarks in results.multi_face_landmarks:
+            if results.face_landmarks:
+                for face_landmarks in results.face_landmarks:
                     # Calculate bounding box in pixels
-                    xs = [lm.x * width for lm in face_landmarks.landmark]
-                    ys = [lm.y * height for lm in face_landmarks.landmark]
+                    xs = [lm.x * width for lm in face_landmarks]
+                    ys = [lm.y * height for lm in face_landmarks]
                     xmin, xmax = int(min(xs)), int(max(xs))
                     ymin, ymax = int(min(ys)), int(max(ys))
                     
@@ -163,8 +168,8 @@ def reframe_active_speaker(
                     center_y = int((ymin + ymax) / 2)
                     
                     # Inner lip landmarks: Upper inner lip (13), Lower inner lip (14)
-                    upper_inner_y = face_landmarks.landmark[13].y * height
-                    lower_inner_y = face_landmarks.landmark[14].y * height
+                    upper_inner_y = face_landmarks[13].y * height
+                    lower_inner_y = face_landmarks[14].y * height
                     
                     # Mouth openness: vertical distance normalized by face height
                     mouth_open = max(0.0, lower_inner_y - upper_inner_y) / bbox_h
