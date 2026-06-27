@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auto Shorts - Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400&amp;family=Outfit:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#3323cc",
+                    "tertiary-fixed": "#71f8e4",
+                    "surface": "#11131e",
+                    "on-error": "#690005",
+                    "on-surface-variant": "#c9c4d8",
+                    "primary": "#cabeff",
+                    "on-tertiary-fixed": "#00201c",
+                    "surface-tint": "#cabeff",
+                    "on-secondary": "#1d00a5",
+                    "secondary-container": "#3626ce",
+                    "on-primary": "#32009a",
+                    "on-secondary-container": "#b3b1ff",
+                    "on-error-container": "#ffdad6",
+                    "inverse-on-surface": "#2e303c",
+                    "surface-dim": "#11131e",
+                    "tertiary-fixed-dim": "#4fdbc8",
+                    "outline": "#938ea1",
+                    "on-primary-fixed-variant": "#4918c8",
+                    "error": "#ffb4ab",
+                    "secondary-fixed-dim": "#c3c0ff",
+                    "on-background": "#e1e1f2",
+                    "surface-container-low": "#191b26",
+                    "surface-container-high": "#272935",
+                    "surface-container-highest": "#323440",
+                    "primary-fixed-dim": "#cabeff",
+                    "background": "#11131e",
+                    "surface-container-lowest": "#0c0e18",
+                    "outline-variant": "#484555",
+                    "secondary": "#c3c0ff",
+                    "on-primary-container": "#2b0088",
+                    "on-surface": "#e1e1f2",
+                    "secondary-fixed": "#e2dfff",
+                    "primary-container": "#947dff",
+                    "inverse-surface": "#e1e1f2",
+                    "tertiary": "#4fdbc8",
+                    "on-tertiary": "#003731",
+                    "on-tertiary-container": "#00302a",
+                    "primary-fixed": "#e6deff",
+                    "error-container": "#93000a",
+                    "on-primary-fixed": "#1c0062",
+                    "on-tertiary-fixed-variant": "#005048",
+                    "on-secondary-fixed": "#0f0069",
+                    "surface-bright": "#373845",
+                    "tertiary-container": "#00a392",
+                    "surface-variant": "#323440",
+                    "inverse-primary": "#613de0",
+                    "surface-container": "#1d1f2b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack_lg": "24px",
+                    "container_max_width": "1440px",
+                    "topbar_height": "64px",
+                    "stack_sm": "8px",
+                    "gutter": "24px",
+                    "sidebar_width": "200px",
+                    "stack_md": "16px",
+                    "stack_xs": "4px",
+                    "margin_page": "32px"
+            },
+            "fontFamily": {
+                    "display": [
+                            "Outfit"
+                    ],
+                    "title-md": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Outfit"
+                    ],
+                    "headline-md": [
+                            "Outfit"
+                    ],
+                    "headline-lg-mobile": [
+                            "Outfit"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "code": [
+                            "JetBrains Mono"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "display": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "title-md": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-md": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "code": [
+                            "13px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-surface');
+        }
+        
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid theme('colors.outline-variant');
+        }
+
+        .input-field {
+            background-color: theme('colors.surface-container-lowest');
+            border: 1px solid theme('colors.outline-variant');
+            color: theme('colors.on-surface');
+        }
+        
+        .input-field:focus {
+            border-color: theme('colors.primary');
+            box-shadow: 0 0 20px rgba(124, 92, 252, 0.15);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #7c5cfc 0%, #4f46e5 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 20px rgba(124, 92, 252, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid theme('colors.outline-variant');
+            color: theme('colors.on-surface');
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: theme('colors.primary');
+            color: theme('colors.primary');
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid theme('colors.error');
+            color: theme('colors.error');
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 180, 171, 0.1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.surface');
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.surface-variant');
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline-variant');
+        }
+    </style>
+</head>
+<body class="antialiased overflow-hidden">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-[200px] bg-surface border-r border-outline-variant shadow-md flex flex-col py-stack_lg px-gutter z-50">
+<div class="mb-stack_lg">
+<h1 class="font-display text-headline-md font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Auto Shorts</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">AI Video Tool</p>
+</div>
+<ul class="flex flex-col gap-stack_sm flex-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all duration-200" href="/">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all duration-200" href="/">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                    New_Project
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all duration-200" href="/projects">
+<span class="material-symbols-outlined" data-icon="video_library">video_library</span>
+                    All_Projects
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md font-body-md text-body-md text-primary font-bold border-l-2 border-primary bg-surface-container-high transition-transform scale-95" href="/settings">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+<div class="mt-auto flex flex-col gap-stack_sm">
+<div class="mb-4">
+<span class="font-label-md text-label-md text-on-surface-variant">Storage: 85% Full</span>
+<div class="h-1.5 w-full bg-surface-variant rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-primary w-[85%]"></div>
+</div>
+</div>
+<ul>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                        Support
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                        Logout
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-topbar_height w-[calc(100%-200px)] bg-surface/50 backdrop-blur-md border-b border-outline-variant flat flex items-center justify-between px-margin_page z-40">
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-4">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Projects</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Current_Edit</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[200px] mt-topbar_height h-[calc(100vh-64px)] overflow-y-auto p-margin_page">
+<div class="max-w-[800px] mx-auto flex flex-col gap-stack_lg pb-24">
+<div class="mb-2">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Settings</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Configure your processing models and workspace preferences.</p>
+</div>
+<!-- Section 1: AI Model -->
+<section class="glass-panel rounded-xl p-stack_lg">
+<h3 class="font-title-md text-title-md text-primary mb-stack_md flex items-center gap-2">
+<span class="material-symbols-outlined">smart_toy</span>
+                    AI Model Configuration
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack_md">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">LLM Model</label>
+<select class="input-field rounded-md px-3 py-2 font-body-md text-body-md w-full" disabled>
+<option selected>{{ settings.llm_model }}</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Whisper Model</label>
+<div class="relative w-full">
+<select class="input-field rounded-md px-3 py-2 font-body-md text-body-md w-full appearance-none" disabled>
+<option selected>{{ settings.whisper_model }} (Recommended)</option>
+</select>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none material-symbols-outlined text-on-surface-variant text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+<div class="mt-stack_md flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Models Directory</label>
+<div class="flex items-center gap-2">
+<input class="input-field rounded-md px-3 py-2 font-code text-code w-full flex-1 opacity-70 cursor-not-allowed" readonly="" type="text" value="{{ settings.models_dir }}"/>
+</div>
+</div>
+<div class="mt-stack_md flex items-center gap-2 bg-surface-container-low p-3 rounded-md border border-outline-variant">
+<span class="material-symbols-outlined text-tertiary">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface">Whisper large-v3</span>
+<span class="ml-auto font-label-md text-label-md bg-tertiary/10 text-tertiary px-2 py-1 rounded-full border border-tertiary/20">Downloaded</span>
+</div>
+</section>
+<!-- Section 2: Video Output -->
+<section class="glass-panel rounded-xl p-stack_lg">
+<h3 class="font-title-md text-title-md text-primary mb-stack_md flex items-center gap-2">
+<span class="material-symbols-outlined">movie</span>
+                    Video Output
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack_md">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Output Resolution</label>
+<select class="input-field rounded-md px-3 py-2 font-body-md text-body-md w-full" disabled>
+<option selected>{{ settings.output_width }}x{{ settings.output_height }} (9:16 Vertical)</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Min Duration (Sec)</label>
+<input class="input-field rounded-md px-3 py-2 font-body-md text-body-md w-full" type="number" value="{{ settings.min_clip_duration }}" disabled/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Max Duration (Sec)</label>
+<input class="input-field rounded-md px-3 py-2 font-body-md text-body-md w-full" type="number" value="{{ settings.max_clip_duration }}" disabled/>
+</div>
+</div>
+</section>
+<!-- Section 3: Analysis -->
+<section class="glass-panel rounded-xl p-stack_lg">
+<h3 class="font-title-md text-title-md text-primary mb-stack_md flex items-center gap-2">
+<span class="material-symbols-outlined">analytics</span>
+                    Analysis Parameters
+                </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack_md">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Chunk Window (Sec)</label>
+<input class="input-field rounded-md px-3 py-2 font-body-md text-body-md w-full" type="number" value="{{ settings.chunk_window_seconds }}" disabled/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Overlap (Sec)</label>
+<input class="input-field rounded-md px-3 py-2 font-body-md text-body-md w-full" type="number" value="{{ settings.chunk_overlap_seconds }}" disabled/>
+</div>
+</div>
+</section>
+<!-- Section 4: Workspace -->
+<section class="glass-panel rounded-xl p-stack_lg">
+<h3 class="font-title-md text-title-md text-primary mb-stack_md flex items-center gap-2">
+<span class="material-symbols-outlined">folder_open</span>
+                    Workspace &amp; Storage
+                </h3>
+<div class="flex flex-col gap-stack_md">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Projects Directory</label>
+<input class="input-field rounded-md px-3 py-2 font-code text-code w-full opacity-70 cursor-not-allowed border-dashed" readonly="" type="text" value="{{ settings.projects_dir }}"/>
+</div>
+<div class="mt-2 bg-surface-container-low p-4 rounded-md border border-outline-variant">
+<div class="flex justify-between items-center mb-2">
+<span class="font-body-md text-body-md text-on-surface">Storage Used</span>
+<span class="font-code text-code text-on-surface-variant">850GB / 1TB (85%)</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%]"></div>
+</div>
+<div class="mt-4 flex justify-end">
+<button class="btn-danger px-4 py-2 rounded-md font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete_sweep</span>
+                                Clear Cache (45GB)
+                            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: About -->
+<section class="glass-panel rounded-xl p-stack_lg flex flex-col items-center justify-center text-center">
+<h1 class="font-display text-headline-md font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-2">Auto Shorts</h1>
+<p class="font-code text-code text-on-surface-variant mb-4">Version v0.1.0</p>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 max-w-md">
+                     Built with Python, PyTorch, Whisper, and FFmpeg. Designed for high-performance AI video processing.
+                 </p>
+<a class="flex items-center gap-2 text-primary hover:text-secondary transition-colors font-label-md text-label-md" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
+                     View on GitHub
+                 </a>
+</section>
+</div>
+</main>
+</body></html>

@@ -158,11 +158,6 @@ def _run_step(step_name: str, project: Project, project_dir: Path):
     elif step_name == "caption":
         caption(project_dir)
 
-    elif step_name == "enhance":
-        # TODO: v0.8 — Effects and enhancements
-        logger.warning(f"Step '{step_name}' not yet implemented — skipping")
-        return
-
     else:
         raise ValueError(f"Unknown pipeline step: {step_name}")
 

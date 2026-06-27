@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auto Shorts - Project Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#3323cc",
+                      "tertiary-fixed": "#71f8e4",
+                      "surface": "#11131e",
+                      "on-error": "#690005",
+                      "on-surface-variant": "#c9c4d8",
+                      "primary": "#cabeff",
+                      "on-tertiary-fixed": "#00201c",
+                      "surface-tint": "#cabeff",
+                      "on-secondary": "#1d00a5",
+                      "secondary-container": "#3626ce",
+                      "on-primary": "#32009a",
+                      "on-secondary-container": "#b3b1ff",
+                      "on-error-container": "#ffdad6",
+                      "inverse-on-surface": "#2e303c",
+                      "surface-dim": "#11131e",
+                      "tertiary-fixed-dim": "#4fdbc8",
+                      "outline": "#938ea1",
+                      "on-primary-fixed-variant": "#4918c8",
+                      "error": "#ffb4ab",
+                      "secondary-fixed-dim": "#c3c0ff",
+                      "on-background": "#e1e1f2",
+                      "surface-container-low": "#191b26",
+                      "surface-container-high": "#272935",
+                      "surface-container-highest": "#323440",
+                      "primary-fixed-dim": "#cabeff",
+                      "background": "#11131e",
+                      "surface-container-lowest": "#0c0e18",
+                      "outline-variant": "#484555",
+                      "secondary": "#c3c0ff",
+                      "on-primary-container": "#2b0088",
+                      "on-surface": "#e1e1f2",
+                      "secondary-fixed": "#e2dfff",
+                      "primary-container": "#947dff",
+                      "inverse-surface": "#e1e1f2",
+                      "tertiary": "#4fdbc8",
+                      "on-tertiary": "#003731",
+                      "on-tertiary-container": "#00302a",
+                      "primary-fixed": "#e6deff",
+                      "error-container": "#93000a",
+                      "on-primary-fixed": "#1c0062",
+                      "on-tertiary-fixed-variant": "#005048",
+                      "on-secondary-fixed": "#0f0069",
+                      "surface-bright": "#373845",
+                      "tertiary-container": "#00a392",
+                      "surface-variant": "#323440",
+                      "inverse-primary": "#613de0",
+                      "surface-container": "#1d1f2b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack_lg": "24px",
+                      "container_max_width": "1440px",
+                      "topbar_height": "64px",
+                      "stack_sm": "8px",
+                      "gutter": "24px",
+                      "sidebar_width": "200px",
+                      "stack_md": "16px",
+                      "stack_xs": "4px",
+                      "margin_page": "32px"
+              },
+              "fontFamily": {
+                      "display": [
+                              "Outfit"
+                      ],
+                      "title-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Outfit"
+                      ],
+                      "headline-md": [
+                              "Outfit"
+                      ],
+                      "headline-lg-mobile": [
+                              "Outfit"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "code": [
+                              "JetBrains Mono"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "code": [
+                              "13px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body { background-color: #0d0f1a; }
+        .glass-panel {
+            background-color: #141625;
+            border: 1px solid #1e293b;
+        }
+        .glass-card {
+            background-color: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid #1e293b;
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(124, 92, 252, 0.15);
+            border-color: #7c5cfc;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #7c5cfc, #4f46e5);
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 0 10px rgba(124, 92, 252, 0.5);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #1e293b;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover {
+            border-color: #7c5cfc;
+        }
+    </style>
+</head>
+<body class="text-on-surface font-body-md antialiased overflow-x-hidden min-h-screen">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-[200px] bg-surface border-r border-outline-variant shadow-md flex flex-col py-stack_lg px-gutter hidden md:flex z-50">
+<div class="mb-8">
+<h1 class="font-display text-headline-md font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Auto Shorts</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">AI Video Tool</p>
+</div>
+<ul class="flex-1 space-y-2">
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high p-2 rounded-md" href="/">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high p-2 rounded-md" href="/">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">add_circle</span>
+<span class="font-label-md text-label-md">New_Project</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high p-2 rounded-md" href="/projects">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">video_library</span>
+<span class="font-label-md text-label-md">All_Projects</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high p-2 rounded-md" href="/settings">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto pt-4 border-t border-outline-variant">
+<div class="mb-4 text-center">
+<span class="font-label-md text-label-md text-primary">Storage: 85% Full</span>
+<div class="w-full bg-surface-container-highest h-1 mt-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+</div>
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high p-2 rounded-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high p-2 rounded-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-topbar_height w-full md:w-[calc(100%-200px)] bg-surface/50 backdrop-blur-md border-b border-outline-variant flex items-center justify-between px-margin_page z-40">
+<div class="flex items-center gap-6 hidden md:flex">
+<a class="text-primary font-bold font-label-md text-label-md hover:opacity-80 transition-opacity" href="#">Projects</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors hover:opacity-80 transition-opacity" href="#">Current_Edit</a>
+</div>
+<!-- Mobile Logo -->
+<div class="md:hidden">
+<h1 class="font-display text-title-md font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Auto Shorts</h1>
+</div>
+<div class="flex items-center gap-4 text-primary">
+<button class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="md:ml-[200px] mt-topbar_height p-margin_page max-w-container_max_width mx-auto">
+<!-- Project Header -->
+<div class="glass-panel rounded-xl p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-2">
+<h1 class="font-headline-lg text-headline-lg font-bold text-on-surface">{{ project.name }}</h1>
+<span class="px-2 py-1 rounded bg-tertiary-container/20 text-tertiary-fixed font-label-md text-[10px] uppercase tracking-wider border border-tertiary-container/30">Completed</span>
+</div>
+<div class="flex flex-wrap items-center gap-4 text-on-surface-variant font-body-md text-sm mb-4">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> {{ project_duration }}</span>
+<span>·</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">language</span> English</span>
+<span>·</span>
+<a class="flex items-center gap-1 text-primary hover:underline" href="{{ project.youtube_url }}" target="_blank"><span class="material-symbols-outlined text-[16px]">link</span> Source Video</a>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant font-label-md text-xs">Pipeline Status:</span>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="text-xs text-tertiary">Transcribed</span>
+<span class="w-4 border-t border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="text-xs text-tertiary">Analyzed</span>
+<span class="w-4 border-t border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="text-xs text-tertiary">Cut & Captioned</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-3">
+<form action="/project/{{ project_name }}/reanalyze" method="post">
+    <button type="submit" class="btn-secondary px-4 py-2 rounded-lg font-label-md flex items-center gap-2 text-on-surface">
+    <span class="material-symbols-outlined text-[18px]">refresh</span> Re-analyze
+    </button>
+</form>
+<form action="/project/{{ project_name }}/open" method="post" target="_blank" onsubmit="fetch(this.action, {method: 'POST'}); return false;">
+    <button type="submit" class="btn-secondary px-4 py-2 rounded-lg font-label-md flex items-center gap-2 text-on-surface">
+    <span class="material-symbols-outlined text-[18px]">folder_open</span> Open Folder
+    </button>
+</form>
+</div>
+</div>
+<!-- Clips Header -->
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface">Generated Clips (5)</h2>
+<div class="relative">
+<select class="bg-surface-container-high border border-outline-variant text-on-surface font-body-md text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 appearance-none pr-8">
+<option>Sort by: Virality Score</option>
+<option>Sort by: Duration</option>
+<option>Sort by: Chronological</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Clips Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+{% if not clips %}
+<div class="col-span-full py-12 text-center text-on-surface-variant text-body-lg bg-surface-container-low rounded-xl border border-outline-variant">
+    No clips generated yet. Check the processing logs.
+</div>
+{% endif %}
+{% for clip in clips %}
+<div class="glass-card rounded-xl overflow-hidden glow-hover transition-all duration-300 flex flex-col h-full group border border-outline-variant hover:border-outline">
+<div class="relative aspect-[9/16] bg-surface-container-lowest w-full flex-shrink-0">
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+{% if clip.has_file %}
+<a href="/project/{{ project_name }}/clip/{{ clip.id }}" class="w-12 h-12 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/50 flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">play_arrow</span>
+</a>
+{% else %}
+<span class="text-xs text-outline bg-surface/80 backdrop-blur px-3 py-1.5 rounded-lg border border-outline-variant">Rendering Video...</span>
+{% endif %}
+</div>
+<div class="absolute top-3 right-3 bg-tertiary-container/80 backdrop-blur-md px-2 py-1 rounded-md border border-tertiary/30 flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-[14px] text-tertiary">{{ clip.category_icon }}</span>
+<span class="font-label-md text-tertiary font-bold">{{ clip.score }}/100</span>
+</div>
+<div class="absolute bottom-3 left-3 bg-surface-container/80 backdrop-blur-md px-2 py-1 rounded-md border border-outline-variant/50">
+<span class="font-label-md text-on-surface font-medium">{{ clip.duration_str }}</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-code text-on-surface-variant text-xs">Clip #{{ clip.id }}</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/30 text-secondary font-label-md text-[10px] uppercase">{{ clip.category }}</span>
+</div>
+<h3 class="font-title-md text-title-md font-semibold text-on-surface mb-2 line-clamp-2">{{ clip.title }}</h3>
+<div class="mb-4 bg-surface-container-low p-3 rounded-lg border border-outline-variant/30 flex-1">
+<span class="text-xs text-primary font-label-md uppercase mb-1 block">Hook</span>
+<p class="font-body-md text-sm text-on-surface-variant italic leading-tight">"{{ clip.hook }}"</p>
+</div>
+<div class="flex gap-2 mt-auto">
+<a href="/project/{{ project_name }}/clip/{{ clip.id }}" class="flex-1 text-center btn-secondary py-2 rounded-lg font-label-md text-xs text-on-surface flex items-center justify-center">Preview</a>
+{% if clip.has_file %}
+<a href="/api/project/{{ project_name }}/clip/{{ clip.id }}/video" download class="flex-1 text-center btn-primary py-2 rounded-lg font-label-md text-xs text-on-surface flex items-center justify-center">Download</a>
+{% endif %}
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+</main>
+</body></html>

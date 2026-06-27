@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>All Projects - Auto Shorts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#3323cc",
+                      "tertiary-fixed": "#71f8e4",
+                      "surface": "#11131e",
+                      "on-error": "#690005",
+                      "on-surface-variant": "#c9c4d8",
+                      "primary": "#cabeff",
+                      "on-tertiary-fixed": "#00201c",
+                      "surface-tint": "#cabeff",
+                      "on-secondary": "#1d00a5",
+                      "secondary-container": "#3626ce",
+                      "on-primary": "#32009a",
+                      "on-secondary-container": "#b3b1ff",
+                      "on-error-container": "#ffdad6",
+                      "inverse-on-surface": "#2e303c",
+                      "surface-dim": "#11131e",
+                      "tertiary-fixed-dim": "#4fdbc8",
+                      "outline": "#938ea1",
+                      "on-primary-fixed-variant": "#4918c8",
+                      "error": "#ffb4ab",
+                      "secondary-fixed-dim": "#c3c0ff",
+                      "on-background": "#e1e1f2",
+                      "surface-container-low": "#191b26",
+                      "surface-container-high": "#272935",
+                      "surface-container-highest": "#323440",
+                      "primary-fixed-dim": "#cabeff",
+                      "background": "#11131e",
+                      "surface-container-lowest": "#0c0e18",
+                      "outline-variant": "#484555",
+                      "secondary": "#c3c0ff",
+                      "on-primary-container": "#2b0088",
+                      "on-surface": "#e1e1f2",
+                      "secondary-fixed": "#e2dfff",
+                      "primary-container": "#947dff",
+                      "inverse-surface": "#e1e1f2",
+                      "tertiary": "#4fdbc8",
+                      "on-tertiary": "#003731",
+                      "on-tertiary-container": "#00302a",
+                      "primary-fixed": "#e6deff",
+                      "error-container": "#93000a",
+                      "on-primary-fixed": "#1c0062",
+                      "on-tertiary-fixed-variant": "#005048",
+                      "on-secondary-fixed": "#0f0069",
+                      "surface-bright": "#373845",
+                      "tertiary-container": "#00a392",
+                      "surface-variant": "#323440",
+                      "inverse-primary": "#613de0",
+                      "surface-container": "#1d1f2b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack_lg": "24px",
+                      "container_max_width": "1440px",
+                      "topbar_height": "64px",
+                      "stack_sm": "8px",
+                      "gutter": "24px",
+                      "sidebar_width": "200px",
+                      "stack_md": "16px",
+                      "stack_xs": "4px",
+                      "margin_page": "32px"
+              },
+              "fontFamily": {
+                      "display": [
+                              "Outfit"
+                      ],
+                      "title-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Outfit"
+                      ],
+                      "headline-md": [
+                              "Outfit"
+                      ],
+                      "headline-lg-mobile": [
+                              "Outfit"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "code": [
+                              "JetBrains Mono"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "code": [
+                              "13px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(124, 92, 252, 0.15);
+        }
+        .btn-primary-gradient {
+            background: linear-gradient(to right, #7c5cfc, #4f46e5);
+        }
+        .btn-primary-gradient:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 0 10px rgba(124, 92, 252, 0.5);
+        }
+        
+        .card-inner-shadow {
+            box-shadow: inset 0 -40px 40px -20px rgba(13, 15, 26, 0.9);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-stack_lg px-gutter bg-surface fixed left-0 top-0 h-full w-sidebar_width border-r border-outline-variant shadow-md z-40">
+<div class="mb-8">
+<h1 class="font-display text-headline-md font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Auto Shorts</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">AI Video Tool</p>
+</div>
+<div class="flex flex-col gap-4 flex-grow">
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high transition-all" href="/">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high transition-all" href="/">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-label-md text-label-md">New_Project</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-primary font-bold border-l-2 border-primary pl-2 hover:bg-surface-container-high transition-all Active: scale-95 transition-transform bg-surface-container-high" href="/projects">
+<span class="material-symbols-outlined" data-icon="video_library">video_library</span>
+<span class="font-label-md text-label-md">All_Projects</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high transition-all" href="/settings">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-4">
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant text-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Storage: 85% Full</span>
+<div class="w-full bg-surface-variant h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+</div>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors duration-200 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-grow w-full md:ml-sidebar_width min-h-screen flex flex-col relative pb-20 md:pb-0">
+<!-- TopNavBar -->
+<header class="hidden md:flex items-center justify-between px-margin_page ml-[200px] bg-surface/50 backdrop-blur-md fixed top-0 right-0 h-topbar_height w-[calc(100%-200px)] border-b border-outline-variant flat z-30">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-md text-headline-md text-on-surface">All Projects</h2>
+<span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label-md text-label-md border border-outline-variant">12</span>
+</div>
+<div class="flex items-center gap-6">
+<!-- Search -->
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-background border border-outline-variant rounded-lg pl-10 pr-4 py-1.5 text-on-surface text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors w-64 placeholder-on-surface-variant" placeholder="Search projects..." type="text"/>
+</div>
+<div class="flex gap-4 items-center text-on-surface-variant">
+<button class="hover:text-primary transition-colors hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:text-primary transition-colors hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Mobile Header (simplified for demo) -->
+<header class="md:hidden flex items-center justify-between px-4 h-16 bg-surface border-b border-outline-variant sticky top-0 z-30">
+<h1 class="font-display text-headline-lg-mobile font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Auto Shorts</h1>
+<button class="text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Canvas -->
+<div class="flex-grow p-4 md:p-margin_page mt-0 md:mt-topbar_height max-w-container_max_width mx-auto w-full">
+<!-- Mobile Title & Search -->
+<div class="md:hidden mb-6 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">All Projects</h2>
+<span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label-md text-label-md border border-outline-variant">12</span>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-background border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-on-surface text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none" placeholder="Search projects..." type="text"/>
+</div>
+</div>
+<!-- Filters and Toggle -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-stack_lg">
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md transition-colors border border-transparent">
+                        All
+                    </button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest font-label-md text-label-md transition-colors border border-outline-variant">
+                        Completed
+                    </button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest font-label-md text-label-md transition-colors border border-outline-variant flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Processing
+                    </button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest font-label-md text-label-md transition-colors border border-outline-variant flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error"></span> Failed
+                    </button>
+</div>
+<div class="flex bg-surface-container-high p-1 rounded-lg border border-outline-variant self-start sm:self-auto">
+<button class="p-1 rounded-md bg-surface text-primary shadow-sm">
+<span class="material-symbols-outlined text-sm block">grid_view</span>
+</button>
+<button class="p-1 rounded-md text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm block">view_list</span>
+</button>
+</div>
+</div>
+<!-- Grid Content -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-stack_md lg:gap-gutter">
+{% if not projects %}
+<div class="col-span-full py-12 text-center text-on-surface-variant text-body-lg bg-surface-container-low rounded-xl border border-outline-variant">
+    No projects created yet. Go to the <a href="/" class="text-primary hover:underline font-semibold">Dashboard</a> to start.
+</div>
+{% endif %}
+{% for p in projects %}
+  {% if p.status == 'completed' %}
+    <!-- Card (Completed) -->
+    <div class="group relative bg-[#141625] rounded-xl border border-outline-variant overflow-hidden flex flex-col hover:border-outline transition-colors glow-hover h-full">
+    <div class="relative w-full pt-[56.25%] bg-surface-container-low">
+    <img class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500"/>
+    <div class="absolute inset-0 card-inner-shadow"></div>
+    <div class="absolute top-3 left-3">
+    <span class="bg-surface/80 backdrop-blur-sm border border-outline-variant text-on-surface px-2 py-0.5 rounded-md font-code text-[11px]">Completed</span>
+    </div>
+    </div>
+    <div class="p-4 flex flex-col flex-grow glass-panel relative z-10 border-t border-outline-variant/50">
+    <h3 class="font-title-md text-title-md text-on-surface mb-2 line-clamp-2">{{ p.name }}</h3>
+    <div class="font-label-md text-label-md text-on-surface-variant mt-auto">
+                                {{ p.clips_count }} clips · {{ p.duration_str }}
+                            </div>
+    <!-- Hover Actions Overlay -->
+    <div class="absolute inset-0 bg-surface/90 backdrop-blur-md flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+    <a href="/project/{{ p.folder_name }}" class="btn-primary px-4 py-2 rounded-lg font-label-md text-label-md font-semibold flex items-center gap-2">
+    <span class="material-symbols-outlined text-sm">open_in_new</span> Open
+    </a>
+    <form action="/project/{{ p.folder_name }}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this project?');">
+        <button type="submit" class="bg-transparent border border-outline-variant text-on-surface-variant hover:border-error hover:text-error px-3 py-2 rounded-lg transition-colors">
+        <span class="material-symbols-outlined text-sm">delete</span>
+        </button>
+    </form>
+    </div>
+    </div>
+    </div>
+  {% elif p.status == 'failed' %}
+    <!-- Card (Failed) -->
+    <div class="group relative bg-[#141625] rounded-xl border border-error/30 overflow-hidden flex flex-col h-full">
+    <div class="relative w-full pt-[56.25%] bg-surface-container-low">
+    <div class="absolute inset-0 bg-surface-container-highest flex items-center justify-center flex-col gap-2 opacity-80">
+    <span class="material-symbols-outlined text-error text-3xl">error</span>
+    </div>
+    <div class="absolute top-3 left-3">
+    <span class="bg-surface/80 backdrop-blur-sm border border-error/30 text-error px-2 py-0.5 rounded-md font-code text-[11px] flex items-center gap-1.5">
+    <span class="w-1.5 h-1.5 rounded-full bg-error"></span> Failed
+                                </span>
+    </div>
+    </div>
+    <div class="p-4 flex flex-col flex-grow glass-panel relative z-10 border-t border-error/20">
+    <h3 class="font-title-md text-title-md text-on-surface mb-2 line-clamp-2 text-on-surface-variant">{{ p.name }}</h3>
+    <div class="font-label-md text-label-md text-error mt-auto">
+                                Failed. Tap to retry.
+                            </div>
+    <!-- Hover Actions Overlay -->
+    <div class="absolute inset-0 bg-surface/90 backdrop-blur-md flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+    <form action="/project/{{ p.folder_name }}/reanalyze" method="post">
+        <button type="submit" class="bg-transparent border border-outline-variant text-on-surface hover:border-primary hover:text-primary px-4 py-2 rounded-lg font-label-md text-label-md transition-colors flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">refresh</span> Retry
+        </button>
+    </form>
+    <form action="/project/{{ p.folder_name }}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this project?');">
+        <button type="submit" class="bg-transparent border border-outline-variant text-on-surface-variant hover:border-error hover:text-error px-3 py-2 rounded-lg transition-colors">
+        <span class="material-symbols-outlined text-sm">delete</span>
+        </button>
+    </form>
+    </div>
+    </div>
+    </div>
+  {% else %}
+    <!-- Card (Processing) -->
+    <div class="group relative bg-[#141625] rounded-xl border border-outline-variant overflow-hidden flex flex-col hover:border-primary/50 transition-colors h-full">
+    <div class="relative w-full pt-[56.25%] bg-surface-container-low">
+    <div class="absolute inset-0 bg-surface/40 backdrop-blur-[2px]"></div>
+    <div class="absolute inset-0 flex items-center justify-center">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-tertiary"></div>
+    </div>
+    <div class="absolute top-3 left-3">
+    <span class="bg-surface/80 backdrop-blur-sm border border-tertiary/30 text-tertiary px-2 py-0.5 rounded-md font-code text-[11px] flex items-center gap-1.5">
+    <span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span> Processing
+                                </span>
+    </div>
+    </div>
+    <div class="p-4 flex flex-col flex-grow glass-panel relative z-10 border-t border-outline-variant/50">
+    <h3 class="font-title-md text-title-md text-on-surface mb-2 line-clamp-2">{{ p.name }}</h3>
+    <div class="font-label-md text-label-md text-on-surface-variant mt-auto">
+                                {{ p.clips_count }} clips · Running
+                            </div>
+    <!-- Hover Actions Overlay -->
+    <div class="absolute inset-0 bg-surface/90 backdrop-blur-md flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+    <a href="/project/{{ p.folder_name }}/processing" class="btn-primary px-4 py-2 rounded-lg font-label-md text-label-md font-semibold flex items-center gap-2">
+    <span class="material-symbols-outlined text-sm">hourglass_empty</span> View Progress
+    </a>
+    </div>
+    </div>
+    </div>
+  {% endif %}
+{% endfor %}
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface/90 backdrop-blur-md border-t border-outline-variant flex items-center justify-around h-16 z-40 pb-safe">
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-[10px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="add_circle">add_circle</span>
+<span class="font-label-md text-[10px]">New</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-primary" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="video_library" data-weight="fill">video_library</span>
+<span class="font-label-md text-[10px] font-bold">Projects</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+<span class="font-label-md text-[10px]">Settings</span>
+</a>
+</nav>
+</body></html>

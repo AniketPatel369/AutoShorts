@@ -119,6 +119,13 @@ def cmd_status(args):
     _print_project_status(project)
 
 
+def cmd_ui(args):
+    """Start the FastAPI Web UI."""
+    import uvicorn
+    print(f"\n🚀 Starting Auto Shorts Web UI at http://{args.host}:{args.port}")
+    uvicorn.run("auto_shorts.web_ui:app", host=args.host, port=args.port, reload=True)
+
+
 def _find_project(name: str) -> Path | None:
     """Find a project directory by name or partial match."""
     ensure_workspace()
@@ -197,6 +204,13 @@ def main():
     p_status = subparsers.add_parser("status", help="Show project status")
     p_status.add_argument("project", help="Project name or directory name")
     p_status.set_defaults(func=cmd_status)
+
+    # ── ui ───────────────────────────────────────────────
+    p_ui = subparsers.add_parser("ui", help="Start the local Web UI dashboard")
+    p_ui.add_argument("--host", default="127.0.0.1", help="Bind host")
+    p_ui.add_argument("--port", type=int, default=8000, help="Bind port")
+    p_ui.set_defaults(func=cmd_ui)
+
 
     # Parse and dispatch
     args = parser.parse_args()

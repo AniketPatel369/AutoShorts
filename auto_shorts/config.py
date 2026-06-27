@@ -51,7 +51,6 @@ PIPELINE_STEPS = [
     "score",
     "cut",
     "caption",
-    "enhance",
 ]
 
 # Step statuses

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clip Detail - Auto Shorts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#3323cc",
+                        "tertiary-fixed": "#71f8e4",
+                        "surface": "#11131e",
+                        "on-error": "#690005",
+                        "on-surface-variant": "#c9c4d8",
+                        "primary": "#cabeff",
+                        "on-tertiary-fixed": "#00201c",
+                        "surface-tint": "#cabeff",
+                        "on-secondary": "#1d00a5",
+                        "secondary-container": "#3626ce",
+                        "on-primary": "#32009a",
+                        "on-secondary-container": "#b3b1ff",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#2e303c",
+                        "surface-dim": "#11131e",
+                        "tertiary-fixed-dim": "#4fdbc8",
+                        "outline": "#938ea1",
+                        "on-primary-fixed-variant": "#4918c8",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#c3c0ff",
+                        "on-background": "#e1e1f2",
+                        "surface-container-low": "#191b26",
+                        "surface-container-high": "#272935",
+                        "surface-container-highest": "#323440",
+                        "primary-fixed-dim": "#cabeff",
+                        "background": "#11131e",
+                        "surface-container-lowest": "#0c0e18",
+                        "outline-variant": "#484555",
+                        "secondary": "#c3c0ff",
+                        "on-primary-container": "#2b0088",
+                        "on-surface": "#e1e1f2",
+                        "secondary-fixed": "#e2dfff",
+                        "primary-container": "#947dff",
+                        "inverse-surface": "#e1e1f2",
+                        "tertiary": "#4fdbc8",
+                        "on-tertiary": "#003731",
+                        "on-tertiary-container": "#00302a",
+                        "primary-fixed": "#e6deff",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#1c0062",
+                        "on-tertiary-fixed-variant": "#005048",
+                        "on-secondary-fixed": "#0f0069",
+                        "surface-bright": "#373845",
+                        "tertiary-container": "#00a392",
+                        "surface-variant": "#323440",
+                        "inverse-primary": "#613de0",
+                        "surface-container": "#1d1f2b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack_lg": "24px",
+                        "container_max_width": "1440px",
+                        "topbar_height": "64px",
+                        "stack_sm": "8px",
+                        "gutter": "24px",
+                        "sidebar_width": "200px",
+                        "stack_md": "16px",
+                        "stack_xs": "4px",
+                        "margin_page": "32px"
+                    },
+                    "fontFamily": {
+                        "display": ["Outfit"],
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Outfit"],
+                        "headline-md": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"],
+                        "label-md": ["Inter"],
+                        "code": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-md": ["18px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "code": ["13px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid #1e293b;
+        }
+        .score-ring {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 22; /* 92% of 283 */
+            transition: stroke-dashoffset 1s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen">
+<!-- Suppressed Shell: SideNavBar & TopNavBar are omitted per logical rules for a focused detail view (linear/transactional / temporary departure). -->
+<!-- Main Canvas -->
+<main class="w-full max-w-container_max_width mx-auto px-margin_page py-stack_lg">
+<!-- Header / Back Navigation -->
+<div class="flex items-center justify-between mb-stack_lg">
+<a href="/project/{{ project_name }}" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span class="font-label-md">Back to Clips Gallery</span>
+</a>
+<div class="flex items-center gap-4">
+{% if clip.id > 1 %}
+<a aria-label="Previous Clip" class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant" href="/project/{{ project_name }}/clip/{{ clip.id - 1 }}">
+<span class="material-symbols-outlined">chevron_left</span>
+</a>
+{% else %}
+<span class="p-2 text-outline cursor-not-allowed opacity-30"><span class="material-symbols-outlined">chevron_left</span></span>
+{% endif %}
+<span class="font-label-md text-on-surface-variant">Clip {{ clip.id }} of {{ total_clips }}</span>
+{% if clip.id < total_clips %}
+<a aria-label="Next Clip" class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant" href="/project/{{ project_name }}/clip/{{ clip.id + 1 }}">
+<span class="material-symbols-outlined">chevron_right</span>
+</a>
+{% else %}
+<span class="p-2 text-outline cursor-not-allowed opacity-30"><span class="material-symbols-outlined">chevron_right</span></span>
+{% endif %}
+</div>
+</div>
+<!-- Split Layout -->
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Left Column: Video Player (45%) -->
+<div class="w-full lg:w-[45%] flex flex-col gap-stack_sm">
+<div class="relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-[#000] border border-outline-variant shadow-[0_0_20px_rgba(124,92,252,0.15)] flex items-center justify-center group">
+<div class="absolute top-4 left-4 z-10 bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full border border-outline-variant">
+<span class="font-label-md text-primary font-bold">CLIP {{ clip.id }}</span>
+</div>
+{% if clip.has_file %}
+<video id="clip-player" class="w-full h-full object-cover z-0" controls preload="metadata">
+<source src="/api/project/{{ project_name }}/clip/{{ clip.id }}/video" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+{% else %}
+<div class="w-full h-full bg-cover bg-center absolute inset-0 opacity-80" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500')"></div>
+<span class="text-sm text-outline bg-surface/80 backdrop-blur px-3 py-1.5 rounded-lg border border-outline-variant z-10">Rendering video file...</span>
+{% endif %}
+</div>
+<!-- Timeline Scrubber -->
+<div class="glass-panel rounded-lg p-stack_md flex flex-col gap-2 mt-stack_sm">
+<p class="font-label-md text-on-surface text-center font-bold">Original Timestamp: {{ clip.timestamp_start }} → {{ clip.timestamp_end }}</p>
+<p class="font-label-md text-on-surface-variant text-center mt-1">Duration: {{ clip.duration_str }}</p>
+</div>
+</div>
+<!-- Right Column: Details & Actions (55%) -->
+<div class="w-full lg:w-[55%] flex flex-col gap-gutter">
+<!-- Score Section -->
+<div class="glass-panel rounded-xl p-stack_lg flex flex-col sm:flex-row gap-stack_lg items-center">
+<!-- Circular Score -->
+<div class="relative w-32 h-32 flex-shrink-0 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="#1e293b" stroke-width="8"></circle>
+<circle class="score-ring" cx="50" cy="50" fill="none" r="45" stroke="url(#scoreGradient)" stroke-linecap="round" stroke-width="8"></circle>
+<defs>
+<lineargradient id="scoreGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#4f46e5"></stop>
+<stop offset="100%" stop-color="#7c5cfc"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="font-display text-display text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary">{{ clip.score }}</span>
+<span class="font-label-md text-tertiary">VIRAL</span>
+</div>
+</div>
+<!-- Breakdown Bars -->
+<div class="flex-grow w-full flex flex-col gap-3">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-md">
+<span class="text-on-surface">Hook Strength</span>
+<span class="text-primary">82</span>
+</div>
+<div class="w-full h-1.5 bg-[#1e293b] rounded-full"><div class="h-full w-[82%] bg-primary rounded-full"></div></div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-md">
+<span class="text-on-surface">Entertainment</span>
+<span class="text-primary">95</span>
+</div>
+<div class="w-full h-1.5 bg-[#1e293b] rounded-full"><div class="h-full w-[95%] bg-primary rounded-full"></div></div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-md">
+<span class="text-on-surface">Shareability</span>
+<span class="text-primary">91</span>
+</div>
+<div class="w-full h-1.5 bg-[#1e293b] rounded-full"><div class="h-full w-[91%] bg-primary rounded-full"></div></div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-md">
+<span class="text-on-surface">Clarity</span>
+<span class="text-primary">88</span>
+</div>
+<div class="w-full h-1.5 bg-[#1e293b] rounded-full"><div class="h-full w-[88%] bg-primary rounded-full"></div></div>
+</div>
+</div>
+</div>
+<!-- Clip Details & AI Analysis Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Clip Details Card -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-stack_md flex flex-col gap-stack_sm">
+<h3 class="font-title-md text-on-surface">Clip Details</h3>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">category</span>
+<span class="font-label-md text-on-surface-variant">Category:</span>
+<span class="px-2 py-0.5 bg-primary/20 text-primary rounded-full font-label-md border border-primary/30 uppercase">{{ clip.category }}</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">schedule</span>
+<span class="font-label-md text-on-surface-variant">Duration:</span>
+<span class="font-code text-on-surface">{{ clip.duration_str }}</span>
+</div>
+</div>
+<!-- AI Analysis Card -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-stack_md flex flex-col gap-stack_sm relative overflow-hidden">
+<h3 class="font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">auto_awesome</span>
+                            AI Analysis
+                        </h3>
+<div class="mt-2 text-on-surface-variant font-body-md">
+<p class="mb-2"><strong class="text-on-surface font-semibold">Hook:</strong> <span class="bg-primary/20 text-primary px-1.5 py-0.5 rounded font-medium">"{{ clip.hook }}"</span></p>
+<p><strong class="text-on-surface font-semibold">Why it works:</strong> {{ clip.reason }}</p>
+</div>
+</div>
+</div>
+<!-- Action Buttons (2x2 Grid) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-stack_md mt-auto">
+{% if clip.has_file %}
+<a href="/api/project/{{ project_name }}/clip/{{ clip.id }}/video" download class="bg-gradient-to-r from-[#7c5cfc] to-[#4f46e5] text-white font-title-md py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-[0_0_20px_rgba(124,92,252,0.3)] transition-all">
+<span class="material-symbols-outlined">download</span>
+                        Download Clip
+</a>
+{% endif %}
+<form action="/project/{{ project_name }}/open" method="post" target="_blank" onsubmit="fetch(this.action, {method: 'POST'}); return false;" class="flex">
+<button type="submit" class="w-full bg-transparent border border-outline-variant text-on-surface font-title-md py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:border-secondary hover:text-secondary transition-all">
+<span class="material-symbols-outlined">folder_open</span>
+                        Open in Finder
+</button>
+</form>
+</div>
+</div>
+</div>
+</main>
+<style>
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</body></html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard - Auto Shorts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#3323cc",
+                      "tertiary-fixed": "#71f8e4",
+                      "surface": "#11131e",
+                      "on-error": "#690005",
+                      "on-surface-variant": "#c9c4d8",
+                      "primary": "#cabeff",
+                      "on-tertiary-fixed": "#00201c",
+                      "surface-tint": "#cabeff",
+                      "on-secondary": "#1d00a5",
+                      "secondary-container": "#3626ce",
+                      "on-primary": "#32009a",
+                      "on-secondary-container": "#b3b1ff",
+                      "on-error-container": "#ffdad6",
+                      "inverse-on-surface": "#2e303c",
+                      "surface-dim": "#11131e",
+                      "tertiary-fixed-dim": "#4fdbc8",
+                      "outline": "#938ea1",
+                      "on-primary-fixed-variant": "#4918c8",
+                      "error": "#ffb4ab",
+                      "secondary-fixed-dim": "#c3c0ff",
+                      "on-background": "#e1e1f2",
+                      "surface-container-low": "#191b26",
+                      "surface-container-high": "#272935",
+                      "surface-container-highest": "#323440",
+                      "primary-fixed-dim": "#cabeff",
+                      "background": "#11131e",
+                      "surface-container-lowest": "#0c0e18",
+                      "outline-variant": "#484555",
+                      "secondary": "#c3c0ff",
+                      "on-primary-container": "#2b0088",
+                      "on-surface": "#e1e1f2",
+                      "secondary-fixed": "#e2dfff",
+                      "primary-container": "#947dff",
+                      "inverse-surface": "#e1e1f2",
+                      "tertiary": "#4fdbc8",
+                      "on-tertiary": "#003731",
+                      "on-tertiary-container": "#00302a",
+                      "primary-fixed": "#e6deff",
+                      "error-container": "#93000a",
+                      "on-primary-fixed": "#1c0062",
+                      "on-tertiary-fixed-variant": "#005048",
+                      "on-secondary-fixed": "#0f0069",
+                      "surface-bright": "#373845",
+                      "tertiary-container": "#00a392",
+                      "surface-variant": "#323440",
+                      "inverse-primary": "#613de0",
+                      "surface-container": "#1d1f2b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack_lg": "24px",
+                      "container_max_width": "1440px",
+                      "topbar_height": "64px",
+                      "stack_sm": "8px",
+                      "gutter": "24px",
+                      "sidebar_width": "200px",
+                      "stack_md": "16px",
+                      "stack_xs": "4px",
+                      "margin_page": "32px"
+              },
+              "fontFamily": {
+                      "display": ["Outfit"],
+                      "title-md": ["Inter"],
+                      "headline-lg": ["Outfit"],
+                      "headline-md": ["Outfit"],
+                      "headline-lg-mobile": ["Outfit"],
+                      "label-md": ["Inter"],
+                      "code": ["JetBrains Mono"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0d0f1a;
+            color: #e1e1f2;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-panel {
+            background: rgba(29, 31, 43, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(147, 142, 161, 0.1);
+        }
+
+        .neon-glow-hover:hover {
+            box-shadow: 0 0 20px rgba(148, 125, 255, 0.15);
+            border-color: #947dff;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #947dff, #613de0);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 0 15px rgba(148, 125, 255, 0.4);
+        }
+
+        .input-glow:focus {
+            border-color: #947dff;
+            box-shadow: 0 0 15px rgba(148, 125, 255, 0.2);
+            outline: none;
+        }
+
+        .sidebar-item-active {
+            background: rgba(148, 125, 255, 0.1);
+            border-left: 3px solid #947dff;
+            color: #cabeff;
+        }
+
+        ::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #323440;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484555;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen overflow-hidden">
+<!-- Side Navigation -->
+<aside class="w-sidebar_width border-r border-outline-variant bg-surface-container-lowest flex flex-col shrink-0">
+<div class="h-topbar_height flex items-center px-6 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">bolt</span>
+<span class="font-display text-xl font-bold tracking-tight">Auto Shorts</span>
+</div>
+</div>
+<nav class="flex-1 py-6 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 sidebar-item-active group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors group" href="#">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-medium">New Project</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors group" href="#">
+<span class="material-symbols-outlined">video_library</span>
+<span class="font-medium">All Projects</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-6 border-t border-outline-variant">
+<div class="glass-panel p-4 rounded-xl space-y-3">
+<div class="flex justify-between items-center text-label-md">
+<span class="text-on-surface-variant">Usage</span>
+<span class="text-primary">12/50 mins</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 24%"></div>
+</div>
+<button class="w-full py-2 text-sm font-semibold border border-primary text-primary rounded-lg hover:bg-primary hover:text-on-primary transition-all">
+                    Upgrade
+                </button>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col min-w-0 bg-background overflow-y-auto">
+<!-- Top Bar -->
+<header class="h-topbar_height border-b border-outline-variant flex items-center justify-between px-margin_page shrink-0 bg-surface-container-lowest/50 backdrop-blur-md sticky top-0 z-10">
+<div class="flex items-center text-on-surface-variant text-sm">
+<span>Dashboard</span>
+<span class="material-symbols-outlined text-sm mx-2">chevron_right</span>
+<span class="text-on-surface font-medium">Overview</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<div class="text-sm font-semibold">Alex Rivers</div>
+<div class="text-xs text-on-surface-variant">Pro Plan</div>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center border-2 border-primary/20">
+<span class="font-bold text-on-primary-container">AR</span>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 p-margin_page space-y-stack_lg">
+<!-- Hero Section -->
+<section class="relative py-12 px-8 rounded-3xl overflow-hidden glass-panel">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-tertiary/5"></div>
+<div class="relative z-10 max-w-2xl mx-auto text-center space-y-6">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-label-md">
+<span class="material-symbols-outlined text-sm mr-1">auto_awesome</span>
+                        AI-Powered Content Engine
+                    </div>
+<h1 class="text-display font-display leading-tight">
+                        Create <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary">Viral Shorts</span> In Seconds
+                    </h1>
+<p class="text-body-lg text-on-surface-variant">
+                        Paste a YouTube link and our AI will automatically identify the most engaging moments, crop them for mobile, and add captions.
+                    </p>
+<!-- URL Input Card -->
+<div class="mt-10 p-2 bg-surface-container-highest/50 backdrop-blur rounded-2xl border border-outline-variant flex flex-col sm:flex-row gap-2 max-w-xl mx-auto">
+<div class="flex-1 flex items-center px-4 bg-surface-container-lowest rounded-xl border border-transparent focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mr-3">link</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-on-surface py-3 placeholder:text-outline" placeholder="Paste YouTube URL here..." type="text"/>
+</div>
+<button class="btn-primary px-8 py-3 rounded-xl font-bold flex items-center justify-center gap-2 whitespace-nowrap">
+<span>Generate Clips</span>
+<span class="material-symbols-outlined">magic_button</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Recent Projects Section -->
+<section class="space-y-stack_md">
+<div class="flex items-center justify-between">
+<h2 class="font-display text-headline-md">Recent Projects</h2>
+<a class="text-primary text-sm font-semibold hover:underline flex items-center gap-1" href="#">
+                        View All <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="flex gap-gutter overflow-x-auto pb-4 -mx-margin_page px-margin_page scroll-smooth">
+<!-- Card 1: Completed -->
+<div class="min-w-[320px] glass-panel rounded-2xl overflow-hidden neon-glow-hover transition-all group flex-shrink-0">
+<div class="relative aspect-video bg-surface-container-highest">
+<img alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw7_bXlyMTAim7KttwPfdWn9ihoDMODHL9vvE4omqPEPWttWwkdCUNXwSu6bpTOgfHNCfnGqyaBQ8zYCBRCBV8kiYKC_n70YxU9WBLnnbNoueJQO893lvM5GcIhwjavEOFpx3JreQyx26AoiaEFHoUI8Mn0ahqYPShkJDfHZn_EMZBz9bPEJDn_FECIBgF1ENR25i8hfiARPhRMxbeXxnXdoiN1gXariV1Oyvzbb6Rd1Z8ZrLS-zGqwuFgW7iRdZJGpUMlqhSZFw"/>
+<div class="absolute top-3 right-3">
+<span class="px-3 py-1 rounded-full bg-on-tertiary-container/90 text-tertiary-fixed text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-sm">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span>
+                                    Completed
+                                </span>
+</div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+<button class="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<h3 class="font-semibold text-title-md truncate flex-1">The Future of AI Architecture</h3>
+<button class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-2 text-label-md text-on-surface-variant">
+<div class="flex items-center gap-1.5 bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined text-sm text-primary">movie</span>
+<span>8 Clips</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined text-sm text-tertiary">trending_up</span>
+<span>1.2k Views</span>
+</div>
+</div>
+<div class="text-xs text-outline flex justify-between items-center">
+<span>2 hours ago</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">timer</span> 12:45</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Processing -->
+<div class="min-w-[320px] glass-panel rounded-2xl overflow-hidden neon-glow-hover transition-all group flex-shrink-0">
+<div class="relative aspect-video bg-surface-container-highest overflow-hidden">
+<img alt="Thumbnail" class="w-full h-full object-cover blur-[2px] scale-105 opacity-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8plU6om7rVwOT3Ew2lZRScTtXgnElCAufLntP8UgvTfVFM45au5nYKanlT_mhpngqcMiYYX_MjeHe3qA959SS1RiC31grkHXkn4yJ6-TzzrW72dpRXYFdUGXO6s_JTG0Z-WWtG62Rv_jDMjkrFojIe_n4Psfjyo3Io1D86bfoaTL63elIESABPTGy1iMI3SH2osogyXVLhgzSwHe-GZJMhbWDG2st3hVLrXz6lYl1q8NLZ9eGs6Il0fQEj1muoYaNf78lx8vEmg"/>
+<div class="absolute inset-0 flex flex-col items-center justify-center p-6 space-y-4">
+<div class="relative w-12 h-12">
+<div class="absolute inset-0 rounded-full border-2 border-primary/20"></div>
+<div class="absolute inset-0 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
+</div>
+<span class="text-sm font-semibold text-primary">Processing... 45%</span>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<h3 class="font-semibold text-title-md truncate flex-1">Gaming PC Build Guide 2024</h3>
+<button class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-2 text-label-md text-on-surface-variant">
+<div class="flex items-center gap-1.5 bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined text-sm text-primary">movie</span>
+<span>Pending</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined text-sm text-tertiary">schedule</span>
+<span>~5m left</span>
+</div>
+</div>
+<div class="text-xs text-outline flex justify-between items-center">
+<span>45 mins ago</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">timer</span> 18:20</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Failed -->
+<div class="min-w-[320px] glass-panel rounded-2xl overflow-hidden neon-glow-hover transition-all group flex-shrink-0">
+<div class="relative aspect-video bg-surface-container-highest">
+<div class="w-full h-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline">error</span>
+</div>
+<div class="absolute top-3 right-3">
+<span class="px-3 py-1 rounded-full bg-error-container/90 text-error text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-sm">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span>
+                                    Failed
+                                </span>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<h3 class="font-semibold text-title-md truncate flex-1 text-on-surface-variant">React 19 Deep Dive</h3>
+<button class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+<p class="text-xs text-error">Could not fetch video data. Please check URL.</p>
+<button class="w-full py-2 text-xs font-bold bg-surface-container-high border border-outline-variant rounded-lg hover:bg-surface-container-highest transition-colors">
+                                Retry Project
+                            </button>
+</div>
+</div>
+<!-- Card 4: Completed -->
+<div class="min-w-[320px] glass-panel rounded-2xl overflow-hidden neon-glow-hover transition-all group flex-shrink-0">
+<div class="relative aspect-video bg-surface-container-highest">
+<img alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBLcU1fKuVZVgul2snzWkTW7FKKpQN1VGVBVoqURitTZrbxqc9uyCWoE0pnE4PKOHema5E_4PmMlgEhSwC-Nze5YjK0Zzf0VxDmZGp2p8vo2hapDCv_KyRuHWbpM0CHLmGaQqROGvwQGxXPRxHZZGVoS4MaO6CdbFfd3d6hQivYWlrxpm0bzwyPNxdG_gmbkmnavUb2ghz9rjVkCID6E9ihOuRGuwbTse7pypt6Y-SGZCACojCVEJ3FSmgkCpDXWPevhRHlpNr2A"/>
+<div class="absolute top-3 right-3">
+<span class="px-3 py-1 rounded-full bg-on-tertiary-container/90 text-tertiary-fixed text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-sm">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span>
+                                    Completed
+                                </span>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-start">
+<h3 class="font-semibold text-title-md truncate flex-1">10 VS Code Tips</h3>
+<button class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-2 text-label-md text-on-surface-variant">
+<div class="flex items-center gap-1.5 bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined text-sm text-primary">movie</span>
+<span>5 Clips</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined text-sm text-tertiary">trending_up</span>
+<span>842 Views</span>
+</div>
+</div>
+<div class="text-xs text-outline flex justify-between items-center">
+<span>Yesterday</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">timer</span> 08:30</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Tips Footer Info -->
+<footer class="pt-8 border-t border-outline-variant grid grid-cols-1 md:grid-cols-3 gap-gutter text-sm text-on-surface-variant">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">lightbulb</span>
+<div>
+<p class="font-semibold text-on-surface">Tip: High resolution pays off</p>
+<p>Upload videos in 1080p or higher for the sharpest social clips.</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">auto_fix</span>
+<div>
+<p class="font-semibold text-on-surface">Smart Auto-Caption</p>
+<p>Our AI automatically detects speaker tone to style captions.</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">rocket_launch</span>
+<div>
+<p class="font-semibold text-on-surface">Direct Export</p>
+<p>Connect your TikTok or Reels account to publish in one click.</p>
+</div>
+</div>
+</footer>
+</main>
+</div>
+</body></html>
