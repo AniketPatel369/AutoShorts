@@ -23,6 +23,7 @@ from auto_shorts.modules.transcriber import transcribe
 from auto_shorts.modules.trend_crawler import crawl_trends
 from auto_shorts.modules.analyzer import analyze
 from auto_shorts.modules.cutter import cut
+from auto_shorts.modules.captioner import caption
 
 logger = logging.getLogger(__name__)
 
@@ -155,9 +156,7 @@ def _run_step(step_name: str, project: Project, project_dir: Path):
         cut(project_dir)
 
     elif step_name == "caption":
-        # TODO: v0.7 — Caption burn-in
-        logger.warning(f"Step '{step_name}' not yet implemented — skipping")
-        return
+        caption(project_dir)
 
     elif step_name == "enhance":
         # TODO: v0.8 — Effects and enhancements
